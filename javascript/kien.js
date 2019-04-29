@@ -16,6 +16,9 @@ var valueline = d3.line()
     .x(function(d) { return x(d.time); })
     .y(function(d) { return y(d.buildings); });
 
+// set the colour scale
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
     .attr("width", width + margin.left + margin.right)
@@ -24,6 +27,8 @@ var locationSelectorDiv = d3.select("#location-selector-div").append("div")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+// full formated data
+var formatedData;
 
 // append the svg object to the line-graph-div of the page
 // appends a 'group' element to 'svg'
@@ -35,8 +40,15 @@ var svg = d3.select("#line-graph-div").append("svg")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+// Define the axes
+var xAxis = d3.axisBottom(x)
+    .tickFormat(d3.timeFormat("%B-%d %H:%M"));
+
+var yAxis = d3.axisLeft(y);
+
+
 // Get the data
-d3.csv("small-challenge-data.csv", function(error, data) {
+d3.csv("/data/challenge-data.csv", function(error, data) {
  
     // format the data
     data.forEach(function(d) {
@@ -61,10 +73,12 @@ d3.csv("small-challenge-data.csv", function(error, data) {
         return a.time - b.time;
       });
 
+    formatedData = data;
+
     // group data by location
     var group_data_by_location = d3.nest()
-    .key(function(d) { return d.location; })
-    .entries(data);
+        .key(function(d) { return d.location; })
+        .entries(data);
 
 
     // Scale the range of the data
@@ -73,10 +87,10 @@ d3.csv("small-challenge-data.csv", function(error, data) {
 
     // Add the X Axis
     svg.append("g")
+        .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x)
-                .tickFormat(d3.timeFormat("%B-%d %H:%M")))
-                .selectAll("text")	
+        .call(xAxis)
+        .selectAll("text")	
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
@@ -84,7 +98,8 @@ d3.csv("small-challenge-data.csv", function(error, data) {
 
     // Add the Y Axis
     svg.append("g")
-        .call(d3.axisLeft(y));
+        .attr("class", "y axis")
+        .call(yAxis);
 
     // Add clip path to hide data outside chart domain
     svg.append("defs").append("clipPath")
@@ -93,22 +108,32 @@ d3.csv("small-challenge-data.csv", function(error, data) {
       .attr("width", width)
       .attr("height", height);
 
-    // set the colour scale
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
-
     legendSpace = width/group_data_by_location.length; // spacing for the legend
 
     // Loop through each symbol / key
     group_data_by_location.forEach(function(d,i) { 
 
-      // Add the lines of each location
-      svg.append("path")
-          .attr("class", "line")
-          .style("stroke", function() { // Add the colours dynamically
-              return d.color = color(d.key); })
-          .style("opacity", 0)
-          .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
-          .attr("d", valueline(d.values));
+        // Add the lines of each location
+        svg.append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colours dynamically
+                return d.color = color(d.key); })
+            .style("opacity", 0)
+            .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
+            .attr("d", valueline(d.values));
+
+        /* //! Add the scatterplot Warning: too many dots 
+            svg.selectAll("dot")
+                .data(data)
+            .enter().append("circle")
+                .attr("r", 3.5)
+                .attr("cx", function(d) { return x(d.time); })
+                .attr("cy", function(d) { return y(d.buildings); })
+                .style("stroke", function() { // Add the colours dynamically
+                    return d.color = color(d.key); })
+                .style("opacity", 1)
+                .attr("id", 'dot_tag'+d.key.replace(/\s+/g, '')); // assign an ID
+        */
 
       // Add the checkboxes
       locationSelectorDiv.append("div");
@@ -134,6 +159,9 @@ d3.csv("small-challenge-data.csv", function(error, data) {
             .attr('for','location-selector'+d.key.replace(/\s+/g, ''))
             .text(d.key); 
       });  
+
+    // show the first location TODO: make this dinamic not hardcoded
+    document.getElementById('location-selector1').click();
 
     // store range for slider
     var sliderDateData = [];
@@ -187,6 +215,57 @@ var start_date ="Mon Apr 06 2020 02:25:00 GMT-0500 (Central Daylight Time)";
 var end_date  ="Fri Apr 10 2020 21:25:00 GMT-0500 (Central Daylight Time)";
 
 function update(start_date,end_date) {
-  
+
+    // filter data set using date range
+    newData = formatedData.filter(function(d) {
+        return ( d.time > start_date && d.time < end_date );
+    })
+
+    // sort data by date 
+    newData = newData.sort(function(a, b) {
+        // Dates will be cast to numbers automagically:
+        return a.time - b.time;
+        });
+
+    reDrawLineGraph(newData);
+
+}
+
+function reDrawLineGraph(newData){
+
+    // Scale the range of the data
+    x.domain(d3.extent(newData, function(d) { return d.time; }));
+    y.domain([0, d3.max(newData, function(d) { return d.buildings; })]);
+
+    // group data by location
+    var group_data_by_location = d3.nest()
+        .key(function(d) { return d.location; })
+        .entries(newData);
+
+
+    // Select the section we want to apply our changes to
+    var svg = d3.select("#line-graph-div").transition();
+    // Loop through each symbol / key
+    group_data_by_location.forEach(function(d,i) { 
+
+        // Add the lines of each location
+        svg.select('#tag' + d.key.replace(/\s+/g, ''))
+            .duration(750)
+            .attr("d", valueline(d.values));
+    });
+
+
+    svg.select(".x.axis") // change the x axis
+        .transition()
+        .duration(750)
+        .call(xAxis)
+        .selectAll("text")	
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-15)")
+    svg.select(".y.axis") // change the y axis
+        .duration(750)
+        .call(yAxis);
 
 }

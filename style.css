@@ -5,7 +5,39 @@
     clip-path: url(#clip);
   }
 
-  #location-selector-div{
-    height: 500px;
-    overflow-y:auto;
-  }
+#location-selector-div{
+  height: 500px;
+  overflow-y:auto;
+}
+
+
+/* Map stuff */
+
+#map-svg{
+  background:#ffffff;
+}
+
+.neighbors {
+  fill: #cccccc;
+  stroke: #333333;
+  stroke-width: 0.5;
+}
+
+.mapHovered{
+  fill: #e69f49;
+}
+
+div.tooltip {	
+  position: absolute;			
+  text-align: center;			
+  width: auto;							
+  padding: 15px;				
+  font: 28px sans-serif;		
+  background: #000000ba;	
+  color: #ffffff;
+  border: 0px;		
+  border-radius: 8px;			
+  pointer-events: none;			
+}
+
+/* Map stuff */
