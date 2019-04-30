@@ -80,6 +80,9 @@ d3.csv("/data/challenge-data.csv", function(error, data) {
         .key(function(d) { return d.location; })
         .entries(data);
 
+    // draw map
+    updateMap(data);
+
 
     // Scale the range of the data
     x.domain(d3.extent(data, function(d) { return d.time; }));
@@ -228,6 +231,7 @@ function update(start_date,end_date) {
         });
 
     reDrawLineGraph(newData);
+    updateMap(newData);
 
 }
 
