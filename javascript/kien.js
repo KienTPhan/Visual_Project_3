@@ -60,6 +60,7 @@ var yAxis = d3.axisLeft(y);
 // Get the data
 d3.csv("/data/challenge-data.csv", function(error, data) {
 
+    allData = data;
     var aggregated_data = d3.nest()
             .key(d => d.location)
             .key(d => d.time.slice(0,13))
@@ -335,10 +336,8 @@ var start_date ="Mon Apr 06 2020 02:25:00 GMT-0500 (Central Daylight Time)";
 var end_date  ="Fri Apr 10 2020 21:25:00 GMT-0500 (Central Daylight Time)";
 
 function update(start_date,end_date) {
-
     // filter data set using date range
     newData = formatedData.filter(function(d) {
-        debugger;
         return ( d.time > start_date && d.time < end_date );
     })
 
@@ -350,6 +349,7 @@ function update(start_date,end_date) {
 
     reDrawLineGraph(newData);
     updateMap(newData);
+    updateStackBarChart(newData);
 
 
 }

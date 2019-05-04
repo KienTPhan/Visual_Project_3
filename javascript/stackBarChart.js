@@ -177,3 +177,15 @@ var tooltip = stack_svg.append("g")
     .style("text-anchor", "middle")
     .attr("font-size", "20px")
     .attr("font-weight", "bold");
+
+
+function updateStackBarChart(data){
+
+   data = data.filter(d=>d.buildings!=="-0.0");
+   data = data.filter(d=>d.location!=="");
+   data = data.filter(d=>d.buildings!=="");
+   data = data.filter(d=>d.location!=="7");
+
+   
+
+}
