@@ -41,3 +41,17 @@ div.tooltip {
 }
 
 /* Map stuff */
+
+/* Stack Bar Chart */
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+#main {
+  width: 960px;
+}
+.axis .domain {
+  display: none;
+}
+
+/* Stack Bar Chart */
