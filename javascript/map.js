@@ -5,7 +5,17 @@ var div = d3.select("body").append("div")
 
 // Define color
 var map_color = d3.scaleQuantile()
-          .range(["rgb(237, 248, 233)", "rgb(186, 228, 179)", "rgb(116,196,118)", "rgb(49,163,84)", "rgb(0,109,44)"]);
+          .range([
+                  "#fff5f0",
+                  "#fee0d2",
+                  "#fcbba1",
+                  "#fc9272",
+                  "#fb6a4a",
+                  "#ef3b2c",
+                  "#cb181d",
+                  "#a50f15",
+                  "#67000d"
+                ]);
 
 var mapMargin = { top: 50, left: 50, right: 50, bottom: 50},
     mapHeight = 400 - mapMargin.top - mapMargin.bottom,
@@ -78,11 +88,11 @@ function updateMap(newData) {
       .attr( 'fill', function(d){
         // if data given is blank
         if (d.properties.damage_value === null){
-          return 'red';
+          return 'grey';
         }
         // if no data was found during selected date 
         else if (d.properties.damage_value === undefined){
-          return 'grey';          
+          return 'black';          
         }
         return map_color(d.properties.damage_value);
       })
@@ -110,8 +120,6 @@ function updateMap(newData) {
  exit.remove();
 
   })
-
-  console.log('hi from updateMap');
 }
 
 // for mouse over data user interface handler

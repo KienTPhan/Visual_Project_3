@@ -16,12 +16,21 @@
 
     <div class="row">
 
-        <div class="col-11">
+        <div class="col-10">
             <div id="line-graph-div"></div>
         </div>
 
-        <div class="col-1">
-                  <div id="location-selector-div"></div>
+        <div class="col-2">
+          <div class="row">
+              <h4>Please pick a damage area</h4>
+              <div class="damage_category_picker_div">
+                  <select class="damage_area_select" form="carform">
+                      <option value="" disabled selected>Select a damage area</option>
+                  </select>
+              </div>
+              <div id="area-selector-div" class="col-6"></div>
+              <div id="location-selector-div" class="col-6"></div>
+          </div> 
         </div>
 
     </div>
@@ -31,6 +40,7 @@
   <!-- load the d3.js library -->    	
   <script src="/javascript/helper/d3v4.js"></script>
   <!-- load kien script -->
+  <script src="/javascript/helper_functions.js"></script>
   <script src="/javascript/kien.js"></script>
   <script src="/javascript/map.js"></script>
   <!-- load Miranda script -->
