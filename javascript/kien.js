@@ -1,9 +1,9 @@
 // current_data_category is "mean_buildings";
 
 // set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var line_graph_margin = {top: 20, right: 20, bottom: 30, left: 50},
+    line_graph_width = 960 - line_graph_margin.left - line_graph_margin.right,
+    line_graph_height = 500 - line_graph_margin.top - line_graph_margin.bottom;
 
 // parse the date / time
 var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
@@ -11,8 +11,8 @@ var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var parseTimeForAggregateData = d3.timeParse("%Y-%m-%d %H");
 
 // set the ranges
-var x = d3.scaleTime().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
+var x = d3.scaleTime().range([0, line_graph_width]);
+var y = d3.scaleLinear().range([line_graph_height, 0]);
 
 //! define the line for aggregate_data
 var valuelineFor_Aggregate_Data = d3.line()
@@ -31,11 +31,11 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", 0 + margin.top + margin.bottom)
+    .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
+    .attr("height", 0 + line_graph_margin.top + line_graph_margin.bottom)
   .append("g")
     .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+          "translate(" + line_graph_margin.left + "," + line_graph_margin.top + ")");
 
 // full formated data
 var formatedData;
@@ -44,18 +44,17 @@ var formatedData;
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
 var svg = d3.select("#line-graph-div").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
+    .attr("height", line_graph_height + line_graph_margin.top + line_graph_margin.bottom)
   .append("g")
     .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+          "translate(" + line_graph_margin.left + "," + line_graph_margin.top + ")");
 
 // Define the axes
 var xAxis = d3.axisBottom(x)
     .tickFormat(d3.timeFormat("%B-%d %H:%M"));
 
 var yAxis = d3.axisLeft(y);
-
 
 // Get the data
 d3.csv("/data/challenge-data.csv").then(function(data) {
@@ -155,9 +154,9 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     // Add the X Axis
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + line_graph_height + ")")
         .call(xAxis)
-        .selectAll("text")	
+        .selectAll("text")
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
@@ -172,10 +171,10 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     svg.append("defs").append("clipPath")
       .attr("id", "clip")
       .append("rect")
-      .attr("width", width)
-      .attr("height", height);
+      .attr("width", line_graph_width)
+      .attr("height", line_graph_height);
 
-    legendSpace = width/group_data_by_location.length; // spacing for the legend
+    legendSpace = line_graph_width/group_data_by_location.length; // spacing for the legend
 
     // Loop through each symbol / key
       aggregated_data.forEach(function(d,i) { 
@@ -193,17 +192,23 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
         //! Add the points to linechart Warning: too many dots 
         svg.selectAll("dot")
-        .data(d.values)
-        .enter().append("circle")
-            .attr("r", 3.5)
-            .attr("cx", function(d) {
-                return x(d.key); })
-            .attr("cy", function(d) { return y(d.value.mean_buildings); }) // TODO: Need to update category
-            .style("stroke", function() { // Add the colours dynamically
-                // debugger;
-                return d.color = color(current_location); })
-            .style("opacity", 1)
-            .attr("id", 'dot_tag'+current_location.replace(/\s+/g, '')); // assign an ID
+            .data(d.values)
+            .enter().append("circle")
+                .attr("r", 3.5)
+                .attr("cx", function(d) {
+                    return x(d.key); })
+                .attr("cy", function(d) { 
+                    if (d.value.mean_buildings > 0){ // TODO: Need to update category
+                        console.log(d.value.mean_buildings);
+                        return y(d.value.mean_buildings);
+                    } else if(d.value.mean_buildings < 0) {
+                        return y(0);
+                    }
+                 }) 
+                .style("stroke", function() { // Add the colours dynamically
+                    return d.color = color(current_location); })
+                .style("opacity", 1)
+                .attr("id", 'dot_tag'+current_location.replace(/\s+/g, '')); // assign an ID
 
         d.values.forEach(function(d){
 
