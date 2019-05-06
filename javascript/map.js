@@ -48,7 +48,7 @@ function updateMap(newData) {
   ]);
 
   // PROCESS newData
-  d3.json("/data/StHimark.geojson", function(geojson){
+  d3.json("/data/StHimark.geojson").then(function(geojson) {
     //Merge the challenge-data and GeoJSON data
     //Loop through once for each challenge-data data value
     for(var i = 0; i < newData.length; i++){

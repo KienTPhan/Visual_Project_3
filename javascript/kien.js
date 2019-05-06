@@ -58,7 +58,7 @@ var yAxis = d3.axisLeft(y);
 
 
 // Get the data
-d3.csv("/data/challenge-data.csv", function(error, data) {
+d3.csv("/data/challenge-data.csv").then(function(data) {
 
     allData = data;
     var aggregated_data = d3.nest()

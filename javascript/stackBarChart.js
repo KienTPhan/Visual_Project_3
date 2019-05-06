@@ -20,8 +20,8 @@ var stack_x = d3.scaleBand()
      .align(0.1);
 
 // load the csv and create the chart
-d3.csv("/data/challenge-data.csv", function(error, data) {
-  if (error) throw error;
+d3.csv("/data/challenge-data.csv").then(function(data) {
+
 
 //    data = data.filter(d=>d.buildings!=="-0.0");
 //    data = data.filter(d=>d.location!=="");
@@ -267,18 +267,30 @@ function updateStackBarChart(data){
       tooltip.select("text").text(d[1]-d[0] + "\n\nDamage:" +d.data["0.0"]);
     });
 
-// fix later for entering new bar or exiting new bar
-//  g.append("g")
-//      .attr("class", "axis")
-//      .attr("transform", "translate(0," + height + ")")
-//      .call(d3.axisBottom(stack_x));
+//fix later for entering new bar or exiting new bar
+ g.append("g")
+     .attr("class", "axis")
+     .attr("transform", "translate(0," + height + ")")
+     .call(d3.axisBottom(stack_x));
 
-  // update y axis
-  g.select('#stack_y_axis')
+    g.append("g")
+      .attr("class", "axis")
+      .attr("id","stack_y_axis")
       .call(d3.axisLeft(y).ticks(null, "s"))
     .append("text")
       .attr("x", 2)
       .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("dy", "0.32em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start");
+
+  // // update y axis
+  // g.select('#stack_y_axis')
+  //     .call(d3.axisLeft(y).ticks(null, "s"))
+  //   .append("text")
+  //     .attr("x", 2)
+  //     .attr("y", y(y.ticks().pop()) + 0.5)
 
     // g
     // .exit()
