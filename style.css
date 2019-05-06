@@ -50,8 +50,8 @@ body {
 #main {
   width: 960px;
 }
-.axis .domain {
+/* .axis .domain {
   display: none;
-}
+} */
 
 /* Stack Bar Chart */
