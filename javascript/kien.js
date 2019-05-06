@@ -140,6 +140,9 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
     // draw map
     updateMap(data);
+
+    // draw stack bar chart
+    updateStackBarChart(data)
     
     // add buttons
     add_area_buttons(data);
