@@ -26,8 +26,14 @@ var valueline = d3.line()
     .x(function(d) { return x(d.time); })
     .y(function(d) { return y(d.buildings); });
 
+// define the line TEST
+var valuelineTest = d3.line() // TODO: make it so its dynamic not just mean of building
+    .defined(function (d) { return d.buildings !== null; })
+    .x(function(d) { return x(d.key); })
+    .y(function(d) { return y(d.value.mean_buildings); });
+
 // set the colour scale
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var color = d3.scaleOrdinal(d3.schemePaired);
 
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
@@ -39,6 +45,7 @@ var locationSelectorDiv = d3.select("#location-selector-div").append("div")
 
 // full formated data
 var formatedData;
+var allData;
 
 // append the svg object to the line-graph-div of the page
 // appends a 'group' element to 'svg'
@@ -58,11 +65,37 @@ var yAxis = d3.axisLeft(y);
 
 // Get the data
 d3.csv("/data/challenge-data.csv").then(function(data) {
+    
+    // format the data
+    data.forEach(function(d) {
+        
+        d.string_time = d.time;
+        d.time = parseTime(d.time); // use to aggregate by hour
 
-    allData = data;
+        if(d.buildings != ''){
+
+          d.buildings = +d.buildings;
+
+        } else {
+
+          d.buildings = null;
+
+        }
+
+    });
+
+    // sort data by date 
+    data = data.sort(function(a, b) {
+        // Dates will be cast to numbers automagically:
+        return a.time - b.time;
+      });
+
+    formatedData = data;
+
+    // aggregate the data by hours
     var aggregated_data = d3.nest()
             .key(d => d.location)
-            .key(d => d.time.slice(0,13))
+            .key(d => d.string_time.slice(0,13))
                 .rollup(function(d) {
                     return{
                       'mean_Power': d3.mean(d, e=>+e.power),
@@ -80,9 +113,9 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                       'mean_buildings': d3.mean(d, e=>+e.buildings),
                       'max_buildings': d3.max(d, e=>+e.buildings),
                       'min_buildings': d3.min(d,e=>+e.buildings),
-                      'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
-                      'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
-                      'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
+                        'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
+                        'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
+                        'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
                     };
                   })
                  .entries(data);
@@ -106,36 +139,11 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
             return a.key - b.key;
             });
     });
-    
-    // format the data
-    data.forEach(function(d) {
 
-        d.time = parseTime(d.time);
-
-        if(d.buildings != ''){
-
-          d.buildings = +d.buildings;
-
-        } else {
-
-          d.buildings = null;
-
-        }
-
-    });
-
-    // sort data by date 
-    data = data.sort(function(a, b) {
-        // Dates will be cast to numbers automagically:
-        return a.time - b.time;
-      });
-
-    formatedData = data;
-
-    // group data by location
-    var group_data_by_location = d3.nest()
-        .key(function(d) { return d.location; })
-        .entries(data);
+    // sort the aggregated_data by location name
+    aggregated_data = aggregated_data.sort(function(a,b) {
+        return +a.key - +b.key;
+    })
 
     // draw map
     updateMap(data);
@@ -174,7 +182,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
       .attr("width", line_graph_width)
       .attr("height", line_graph_height);
 
-    legendSpace = line_graph_width/group_data_by_location.length; // spacing for the legend
+    legendSpace = line_graph_width/aggregated_data.length; // spacing for the legend
 
     // Loop through each symbol / key
       aggregated_data.forEach(function(d,i) { 
@@ -186,7 +194,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
         .attr("class", "line")
         .style("stroke", function() { // Add the colours dynamically
             return d.color = color(current_location); })
-        .style("opacity", 1)
+        .style("opacity", 0)
         .attr("id", 'tag'+current_location.replace(/\s+/g, '')) // assign an ID
         .attr("d", valuelineFor_Aggregate_Data(d.values));
 
@@ -199,7 +207,6 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                     return x(d.key); })
                 .attr("cy", function(d) { 
                     if (d.value.mean_buildings > 0){ // TODO: Need to update category
-                        console.log(d.value.mean_buildings);
                         return y(d.value.mean_buildings);
                     } else if(d.value.mean_buildings < 0) {
                         return y(0);
@@ -207,90 +214,38 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                  }) 
                 .style("stroke", function() { // Add the colours dynamically
                     return d.color = color(current_location); })
-                .style("opacity", 1)
+                .style("opacity", 0)
                 .attr("id", 'dot_tag'+current_location.replace(/\s+/g, '')); // assign an ID
 
-        d.values.forEach(function(d){
-
-            // // Add the checkboxes
-            // locationSelectorDiv.append("div");
+            // Add the checkboxes
+            locationSelectorDiv.append("div");
             
-            // locationSelectorDiv.append("input")
-            //     .attr('type','checkbox')
-            //     .attr('id','location-selector'+d.key.replace(/\s+/g, ''))
-            //     .attr('name','location-selector'+d.key.replace(/\s+/g, ''))
-            //     .attr("class", "location-checkbox")    // style the checkboxes
-            //     .on("click", function(){
-            //         // Determine if current line is visible 
-            //         var active   = d.active ? false : true,
-            //         newOpacity = active ? 1 : 0; 
-            //         // Hide or show the elements based on the ID
-            //         d3.select("#tag"+d.key.replace(/\s+/g, ''))
-            //             .transition().duration(100) 
-            //             .style("opacity", newOpacity); 
-            //         // Update whether or not the elements are active
-            //         d.active = active;
-            //         })
+            locationSelectorDiv.append("input")
+                .attr('type','checkbox')
+                .attr('id','location-selector'+d.key.replace(/\s+/g, ''))
+                .attr('name','location-selector'+d.key.replace(/\s+/g, ''))
+                .attr("class", "location-checkbox")    // style the checkboxes
+                .on("click", function(){
+                    // Determine if current line is visible 
+                    var active   = d.active ? false : true,
+                    newOpacity = active ? 1 : 0; 
+                    // Hide or show the elements based on the ID
+                    d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                        .transition().duration(100) 
+                        .style("opacity", newOpacity); 
+                    // Update whether or not the elements are active
+                    d.active = active;
+                    })
 
-            // locationSelectorDiv.append('label')
-            //         .attr('for','location-selector'+d.key.replace(/\s+/g, ''))
-            //         .text(d.key);
+            locationSelectorDiv.append('label')
+                    .attr('for','location-selector'+d.key.replace(/\s+/g, ''))
+                    .text(d.key);
                         
-            })
  
       }); 
 
     // show the first location TODO: make this dinamic not hardcoded
-    // document.getElementById('location-selector1').click();
-
-    // // Loop through each symbol / key
-    // group_data_by_location.forEach(function(d,i) { 
-    //     // Add the lines of each location
-    //     svg.append("path")
-    //         .attr("class", "line")
-    //         .style("stroke", function() { // Add the colours dynamically
-    //             return d.color = color(d.key); })
-    //         .style("opacity", 0)
-    //         .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign an ID
-    //         .attr("d", valueline(d.values));
-
-    //     /* //! Add the scatterplot Warning: too many dots 
-    //         svg.selectAll("dot")
-    //             .data(data)
-    //         .enter().append("circle")
-    //             .attr("r", 3.5)
-    //             .attr("cx", function(d) { return x(d.time); })
-    //             .attr("cy", function(d) { return y(d.buildings); })
-    //             .style("stroke", function() { // Add the colours dynamically
-    //                 return d.color = color(d.key); })
-    //             .style("opacity", 1)
-    //             .attr("id", 'dot_tag'+d.key.replace(/\s+/g, '')); // assign an ID
-    //     */
-
-    //   // Add the checkboxes
-    //   locationSelectorDiv.append("div");
-      
-    //   locationSelectorDiv.append("input")
-    //       .attr('type','checkbox')
-    //       .attr('id','location-selector'+d.key.replace(/\s+/g, ''))
-    //       .attr('name','location-selector'+d.key.replace(/\s+/g, ''))
-    //       .attr("class", "location-checkbox")    // style the checkboxes
-    //       .on("click", function(){
-    //           // Determine if current line is visible 
-    //           var active   = d.active ? false : true,
-    //           newOpacity = active ? 1 : 0; 
-    //           // Hide or show the elements based on the ID
-    //           d3.select("#tag"+d.key.replace(/\s+/g, ''))
-    //               .transition().duration(100) 
-    //               .style("opacity", newOpacity); 
-    //           // Update whether or not the elements are active
-    //           d.active = active;
-    //           })
-
-    //   locationSelectorDiv.append('label')
-    //         .attr('for','location-selector'+d.key.replace(/\s+/g, ''))
-    //         .text(d.key); 
-    //   });  
+    document.getElementById('location-selector1').click();
 
     // store range for slider
     var sliderDateData = [];
@@ -344,6 +299,7 @@ var start_date ="Mon Apr 06 2020 02:25:00 GMT-0500 (Central Daylight Time)";
 var end_date  ="Fri Apr 10 2020 21:25:00 GMT-0500 (Central Daylight Time)";
 
 function update(start_date,end_date) {
+
     // filter data set using date range
     newData = formatedData.filter(function(d) {
         return ( d.time > start_date && d.time < end_date );
@@ -355,14 +311,67 @@ function update(start_date,end_date) {
         return a.time - b.time;
         });
 
-    reDrawLineGraph(newData);
+    // aggregate the data by hours
+    var aggregated_data = d3.nest()
+            .key(d => d.location)
+            .key(d => d.string_time.slice(0,13))
+                .rollup(function(d) {
+                    return{
+                      'mean_Power': d3.mean(d, e=>+e.power),
+                      'max_Power': d3.max(d, e=>+e.power),
+                      'min_Power': d3.min(d,e=>+e.power),
+                      'mean_sewer_and_water': d3.mean(d, e=>+e.sewer_and_water),
+                      'max_sewer_and_water': d3.max(d, e=>+e.sewer_and_water),
+                      'min_sewer_and_water': d3.min(d,e=>+e.sewer_and_water),
+                      'mean_roads_and_bridges': d3.mean(d, e=>+e.roads_and_bridges),
+                      'max_roads_and_bridges': d3.max(d, e=>+e.roads_and_bridges),
+                      'min_roads_and_bridges': d3.min(d,e=>+e.roads_and_bridges),
+                      'mean_medical': d3.mean(d, e=>+e.medical),
+                      'max_medical': d3.max(d, e=>+e.medical),
+                      'min_medical': d3.min(d,e=>+e.medical),
+                      'mean_buildings': d3.mean(d, e=>+e.buildings),
+                      'max_buildings': d3.max(d, e=>+e.buildings),
+                      'min_buildings': d3.min(d,e=>+e.buildings),
+                        'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
+                        'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
+                        'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
+                    };
+                  })
+                 .entries(newData);
+
+    // format the aggregated_data
+    aggregated_data.forEach(function(d) {
+        
+        d.values.forEach(function(d){
+            
+            d.key = parseTimeForAggregateData(d.key);
+
+        })
+
+    });
+
+    // sort the aggregated_data by date 
+    aggregated_data.forEach(function(d) {
+
+        d.values = d.values.sort(function(a, b) {
+            // Dates will be cast to numbers automagically:
+            return a.key - b.key;
+            });
+    });
+
+    // sort the aggregated_data by location name
+    aggregated_data = aggregated_data.sort(function(a,b) {
+        return +a.key - +b.key;
+    })
+
+    reDrawLineGraph(newData,aggregated_data);
     updateMap(newData);
     updateStackBarChart(newData);
 
 
 }
 
-function reDrawLineGraph(newData){
+function reDrawLineGraph(newData,newAggregateData){
 
     // Scale the range of the data
     x.domain(d3.extent(newData, function(d) { return d.time; }));
@@ -373,16 +382,14 @@ function reDrawLineGraph(newData){
         .key(function(d) { return d.location; })
         .entries(newData);
 
-
     // Select the section we want to apply our changes to
     var svg = d3.select("#line-graph-div").transition();
     // Loop through each symbol / key
-    group_data_by_location.forEach(function(d,i) { 
-
+    newAggregateData.forEach(function(d,i) { 
         // Add the lines of each location
         svg.select('#tag' + d.key.replace(/\s+/g, ''))
             .duration(750)
-            .attr("d", valueline(d.values));
+            .attr("d", valuelineTest(d.values));
     });
 
 

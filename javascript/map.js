@@ -6,15 +6,7 @@ var div = d3.select("body").append("div")
 // Define color
 var map_color = d3.scaleQuantile()
           .range([
-                  "#fff5f0",
-                  "#fee0d2",
-                  "#fcbba1",
-                  "#fc9272",
-                  "#fb6a4a",
-                  "#ef3b2c",
-                  "#cb181d",
-                  "#a50f15",
-                  "#67000d"
+            "#ffffe5","#fff7bc", "#fee391", "#fec44f", "#feb24c", "#fd8d3c","#fc4e2a","#c92828","#931414","#630707","#330202"
                 ]);
 
 var mapMargin = { top: 50, left: 50, right: 50, bottom: 50},
@@ -43,19 +35,46 @@ var map_path = d3.geoPath().projection(mapProjection);
 //TODO: must update to be dynamic to category right now its showing buildings column
 function updateMap(newData) {
 
+  // aggregate the data by hours
+  var aggregated_data = d3.nest()
+          .key(d => d.location)
+          .rollup(function(d) {
+                  return{
+                    'mean_Power': d3.mean(d, e=>+e.power),
+                    'max_Power': d3.max(d, e=>+e.power),
+                    'min_Power': d3.min(d,e=>+e.power),
+                    'mean_sewer_and_water': d3.mean(d, e=>+e.sewer_and_water),
+                    'max_sewer_and_water': d3.max(d, e=>+e.sewer_and_water),
+                    'min_sewer_and_water': d3.min(d,e=>+e.sewer_and_water),
+                    'mean_roads_and_bridges': d3.mean(d, e=>+e.roads_and_bridges),
+                    'max_roads_and_bridges': d3.max(d, e=>+e.roads_and_bridges),
+                    'min_roads_and_bridges': d3.min(d,e=>+e.roads_and_bridges),
+                    'mean_medical': d3.mean(d, e=>+e.medical),
+                    'max_medical': d3.max(d, e=>+e.medical),
+                    'min_medical': d3.min(d,e=>+e.medical),
+                    'mean_buildings': d3.mean(d, e=>+e.buildings),
+                    'max_buildings': d3.max(d, e=>+e.buildings),
+                    'min_buildings': d3.min(d,e=>+e.buildings),
+                      'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
+                      'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
+                      'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
+                  };
+               })
+               .entries(newData);
+
   map_color.domain([ d3.min(newData, function(d){ return d.buildings; }),
-    d3.max(newData, function(d){ return d.buildings; })
+    d3.max(newData, function(d){ return d.buildings; }) //TODO: change to dynaimic category
   ]);
 
   // PROCESS newData
   d3.json("/data/StHimark.geojson").then(function(geojson) {
     //Merge the challenge-data and GeoJSON data
     //Loop through once for each challenge-data data value
-    for(var i = 0; i < newData.length; i++){
+    for(var i = 0; i < aggregated_data.length; i++){
       // grab neighbor's id
-      var neighbor_id = newData[i].location;
-      //grab data value TODO: need to make it work for all categories
-      var damage_value = newData[i].buildings;
+      var neighbor_id = aggregated_data[i].key;
+      //grab data value 
+      var damage_value = aggregated_data[i].value.mean_buildings;  //TODO: need to make it work for all categories
       //find the corresponding neighbor inside the GeoJSON
       for(var n = 0; n < geojson.features.length; n++){
         // properties name gets the neighbor's name

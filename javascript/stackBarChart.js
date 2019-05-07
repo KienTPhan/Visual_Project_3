@@ -91,12 +91,12 @@ function updateStackBarChart(data){
   });
   return result;
   })
-console.log(sData);
-console.log(Object.keys(sData[0]).length -1);
+// console.log(sData);
+// console.log(Object.keys(sData[0]).length -1);
   // sort the stackkeys
   stackKeys = d3.keys(sData[0]).splice(0,Object.keys(sData[0]).length -1).sort((a, b)=>{return +a - (+b);});
 
-  console.log(stackKeys);
+  // console.log(stackKeys);
 
   // update the domain for axis
   stack_x.domain(keyForEachLocationArr);
