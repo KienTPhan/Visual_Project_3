@@ -9,6 +9,8 @@ var map_color = d3.scaleQuantile()
             "#ffffe5","#fff7bc", "#fee391", "#fec44f", "#feb24c", "#fd8d3c","#fc4e2a","#c92828","#931414","#630707","#330202"
                 ]);
 
+                //#e6194B, #3cb44b, #ffe119, #4363d8, #f58231, #42d4f4, #f032e6, #fabebe, #469990, #e6beff, #9A6324, #fffac8, #800000, #aaffc3, #000075, #a9a9a9, #ffffff, #000000
+
 var mapMargin = { top: 50, left: 50, right: 50, bottom: 50},
     mapHeight = 400 - mapMargin.top - mapMargin.bottom,
     mapWidth     = 800 - mapMargin.left - mapMargin.right;

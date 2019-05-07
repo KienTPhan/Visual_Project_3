@@ -33,7 +33,7 @@ var valuelineTest = d3.line() // TODO: make it so its dynamic not just mean of b
     .y(function(d) { return y(d.value.mean_buildings); });
 
 // set the colour scale
-var color = d3.scaleOrdinal(d3.schemePaired);
+var color = d3.scaleOrdinal(['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3','#000075','#a9a9a9','#ffffff','#000000']);
 
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
