@@ -1,3 +1,4 @@
+/* line-graph stuff */
 .line {
     fill: none;
     stroke: steelblue;
@@ -10,9 +11,12 @@
   overflow-y:auto;
 }
 
+/* line-graph stuff */
+.line_hovered {
+  stroke-width: 4px;
+}
 
 /* Map stuff */
-
 #map-svg{
   background:#ffffff;
 }
@@ -24,7 +28,9 @@
 }
 
 .mapHovered{
-  fill: #e69f49;
+  stroke: white;
+  stroke-dasharray: 5px;
+  stroke-width: 8px;
 }
 
 div.tooltip {	

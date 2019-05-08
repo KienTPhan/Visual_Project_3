@@ -1,4 +1,5 @@
 // current_data_category is "mean_buildings";
+var selected_damage_area = "buildings";
 
 // set the dimensions and margins of the graph
 var line_graph_margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -37,11 +38,11 @@ var color = d3.scaleOrdinal(['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f5823
 
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
-    .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
-    .attr("height", 0 + line_graph_margin.top + line_graph_margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + line_graph_margin.left + "," + line_graph_margin.top + ")");
+                                .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
+                                .attr("height", 0 + line_graph_margin.top + line_graph_margin.bottom)
+                            .append("g")
+                                .attr("transform",
+                                    "translate(" + line_graph_margin.left + "," + line_graph_margin.top + ")");
 
 // full formated data
 var formatedData;
@@ -157,7 +158,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
     // Scale the range of the data
     x.domain(d3.extent(data, function(d) { return d.time; }));
-    y.domain([0, d3.max(data, function(d) { return d.buildings; })]);
+    y.domain([0, d3.max(data, function(d) { return d[selected_damage_area]; })]);
 
     // Add the X Axis
     svg.append("g")
@@ -195,27 +196,57 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
         .style("stroke", function() { // Add the colours dynamically
             return d.color = color(current_location); })
         .style("opacity", 0)
+        .style('pointer-events','none')
         .attr("id", 'tag'+current_location.replace(/\s+/g, '')) // assign an ID
-        .attr("d", valuelineFor_Aggregate_Data(d.values));
+        .attr("d", valuelineFor_Aggregate_Data(d.values))
+            .on('mouseover', function(d,i) {
+                var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
 
-        //! Add the points to linechart Warning: too many dots 
-        svg.selectAll("dot")
-            .data(d.values)
-            .enter().append("circle")
-                .attr("r", 3.5)
-                .attr("cx", function(d) {
-                    return x(d.key); })
-                .attr("cy", function(d) { 
-                    if (d.value.mean_buildings > 0){ // TODO: Need to update category
-                        return y(d.value.mean_buildings);
-                    } else if(d.value.mean_buildings < 0) {
-                        return y(0);
-                    }
-                 }) 
-                .style("stroke", function() { // Add the colours dynamically
-                    return d.color = color(current_location); })
-                .style("opacity", 0)
-                .attr("id", 'dot_tag'+current_location.replace(/\s+/g, '')); // assign an ID
+                //show current map path of the hovered line
+                d3.select('#map_path_id_'+current_location_id)
+                    .classed('mapHovered',true);
+
+                d3.select(this).classed('line_hovered',true);
+                div.transition()		
+                        .duration(200)		
+                        .style("opacity", .9);		
+                    div	.html("Neiborhood " + current_location_id)	 // very nicely getting the id of the line
+                        .style("left", (d3.event.pageX) + "px")		
+                        .style("top", (d3.event.pageY - 28) + "px");					
+            })
+            .on('mouseout', function(d){
+                var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
+
+                d3.select(this).classed('line_hovered',false);
+                div.transition()		
+                        .duration(500)		
+                        .style("opacity", 0);	
+
+                //show current map path of the hovered line
+                d3.select('#map_path_id_'+current_location_id)
+                    .classed('mapHovered',false);
+            });
+    
+
+        // //! Add the points to linechart Warning: too many dots 
+        // svg.selectAll("dot")
+        //     .data(d.values)
+        //     .enter().append("circle")
+        //         .attr("r", 3.5)
+        //         .attr("cx", function(d) {
+        //             return x(d.key); })
+        //         .attr("cy", function(d) { 
+        //             if (d.value.mean_buildings > 0){ // TODO: Need to update category
+        //                 return y(d.value.mean_buildings);
+        //             } else if(d.value.mean_buildings < 0) {
+        //                 return y(0);
+        //             }
+        //          }) 
+        //         .style("stroke", function() { // Add the colours dynamically
+        //             return d.color = color(current_location); })
+        //         .style("opacity", 0)
+        //         .attr("class", 'dot_tag'+current_location.replace(/\s+/g, '')); // assign an ID
+
 
             // Add the checkboxes
             locationSelectorDiv.append("div");
@@ -229,10 +260,12 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                     // Determine if current line is visible 
                     var active   = d.active ? false : true,
                     newOpacity = active ? 1 : 0; 
-                    // Hide or show the elements based on the ID
+                    newEvent   = active ? 'all':'none';
+                    // Hide or show the lines based on the ID
                     d3.select("#tag"+d.key.replace(/\s+/g, ''))
                         .transition().duration(100) 
-                        .style("opacity", newOpacity); 
+                        .style("opacity", newOpacity)
+                        .style('pointer-events',newEvent);
                     // Update whether or not the elements are active
                     d.active = active;
                     })
@@ -246,6 +279,8 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
     // show the first location TODO: make this dinamic not hardcoded
     document.getElementById('location-selector1').click();
+
+    
 
     // store range for slider
     var sliderDateData = [];
@@ -295,11 +330,10 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 });
 
 // range dates TODO: Might need to find a way to make it dynamic base on data
-var start_date ="Mon Apr 06 2020 02:25:00 GMT-0500 (Central Daylight Time)";
-var end_date  ="Fri Apr 10 2020 21:25:00 GMT-0500 (Central Daylight Time)";
+var start_date = new Date("Mon Apr 06 2020 00:00:00 GMT-0500 (Central Daylight Time)");
+var end_date  = new Date("Fri Apr 11 2020 00:00:00 GMT-0500 (Central Daylight Time)");
 
 function update(start_date,end_date) {
-
     // filter data set using date range
     newData = formatedData.filter(function(d) {
         return ( d.time > start_date && d.time < end_date );
@@ -390,6 +424,7 @@ function reDrawLineGraph(newData,newAggregateData){
         svg.select('#tag' + d.key.replace(/\s+/g, ''))
             .duration(750)
             .attr("d", valuelineTest(d.values));
+        
     });
 
 

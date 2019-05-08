@@ -9,7 +9,6 @@ var map_color = d3.scaleQuantile()
             "#ffffe5","#fff7bc", "#fee391", "#fec44f", "#feb24c", "#fd8d3c","#fc4e2a","#c92828","#931414","#630707","#330202"
                 ]);
 
-
 var mapMargin = { top: 50, left: 50, right: 50, bottom: 50},
     mapHeight = 400 - mapMargin.top - mapMargin.bottom,
     mapWidth     = 800 - mapMargin.left - mapMargin.right;
@@ -56,9 +55,9 @@ function updateMap(newData) {
                     'mean_buildings': d3.mean(d, e=>+e.buildings),
                     'max_buildings': d3.max(d, e=>+e.buildings),
                     'min_buildings': d3.min(d,e=>+e.buildings),
-                      'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
-                      'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
-                      'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
+                    'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
+                    'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
+                    'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
                   };
                })
                .entries(newData);
@@ -106,6 +105,7 @@ function updateMap(newData) {
       .attr('class','.neighbors')
       .attr( 'd', map_path )
       .attr( 'fill', function(d){
+        // debugger;
         // if data given is blank
         if (d.properties.damage_value === null){
           return 'grey';
@@ -117,6 +117,9 @@ function updateMap(newData) {
         return map_color(d.properties.damage_value);
       })
       .attr('stroke', '#333333')
+      .attr('id', function(d) {
+        return 'map_path_id_'+d.properties.Id;
+      })
       .on('mouseover', function(d) {
 
         var damage_val = handle_missing_data_to_show_users(d.properties.damage_value);
@@ -125,7 +128,7 @@ function updateMap(newData) {
         div.transition()		
                   .duration(200)		
                   .style("opacity", .9);		
-              div	.html(d.properties.Nbrhood + "<br/> ID: " + d.properties.Id + "<br/> Damage Value: " + damage_val )	
+              div	.html(d.properties.Nbrhood + "<br/> ID: " + d.properties.Id + "<br/> Damage Value: " + damage_val.toFixed(2) )	
                   .style("left", (d3.event.pageX) + "px")		
                   .style("top", (d3.event.pageY - 28) + "px");					
       })
