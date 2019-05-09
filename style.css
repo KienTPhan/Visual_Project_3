@@ -7,7 +7,8 @@
   }
 
 #location-selector-div{
-  height: 500px;
+  height: auto;
+  width:1100px;
   overflow-y:auto;
 }
 
@@ -50,14 +51,86 @@ div.tooltip {
 
 /* Stack Bar Chart */
 
+
 body {
   font-family: 'Open Sans', sans-serif;
-}
-#main {
-  width: 960px;
-}
-/* .axis .domain {
-  display: none;
-} */
+  background: #ffffff;
+ }
+ #main {
+  width: 730px;
+ } 
 
 /* Stack Bar Chart */
+
+
+/* nav bar */
+
+/*logo stuff*/
+#logo {
+  height:60px;
+  padding-bottom: 5px;
+}
+
+.navbar-brand {
+height: 60px;
+padding: 5px 0px;
+}
+
+
+.main-container {
+  margin-left: 100px;
+  margin-right: 100px;
+ }
+ 
+ /* Style the tab */
+ .tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+ }
+ 
+ /* Style the buttons that are used to open the tab content */
+ .tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  height: 60.984375px;
+  width: 71.96875px
+ }
+ 
+ /* Change background color of buttons on hover */
+ .tab button:hover {
+  background-color: #ddd;
+ }
+ 
+ /* Create an active/current tablink class */
+ .tab button.active {
+  background-color: #ccc;
+ }
+ 
+ /* Style the tab content */
+ .tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+ }
+ 
+ .tabcontent {
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+ }
+ 
+ /* Go from zero to full opacity */
+ @keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+ }
+ 
+ 
+
+/* nav bar */
+

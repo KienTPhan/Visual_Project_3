@@ -3,8 +3,8 @@ var selected_damage_area = "buildings";
 
 // set the dimensions and margins of the graph
 var line_graph_margin = {top: 20, right: 20, bottom: 30, left: 50},
-    line_graph_width = 960 - line_graph_margin.left - line_graph_margin.right,
-    line_graph_height = 500 - line_graph_margin.top - line_graph_margin.bottom;
+    line_graph_width = 1150 - line_graph_margin.left - line_graph_margin.right,
+    line_graph_height = 300 - line_graph_margin.top - line_graph_margin.bottom;
 
 // parse the date / time
 var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
@@ -35,7 +35,7 @@ var valuelineTest = d3.line() // TODO: make it so its dynamic not just mean of b
 
 // set the colour scale
 var color = d3.scaleOrdinal(['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3','#000075','#a9a9a9','#ffffff','#000000']);
-
+debugger;
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
                                 .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
@@ -249,7 +249,6 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
 
             // Add the checkboxes
-            locationSelectorDiv.append("div");
             
             locationSelectorDiv.append("input")
                 .attr('type','checkbox')
@@ -442,3 +441,26 @@ function reDrawLineGraph(newData,newAggregateData){
         .call(yAxis);
 
 }
+
+function changeTab(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+     // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+     // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+     // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  document.getElementById("defaultOpen").click();
+ 
+ 
+ 
+ 

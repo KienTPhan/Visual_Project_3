@@ -1,53 +1,85 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
-    <script src="/javascript/helper/simple-slider.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css" />
+   <script src="/javascript/helper/simple-slider.js"></script>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
+       <nav class="navbar navbar-default" style="background:#E8E8E8">
+               <div class="" style="padding-left: 100px;">
+                   <a class="navbar-brand" href="#"><img id="logo" src="disaster-relief-round-logo.png"></a>  
+                 <label style="font-size: 30px;">Disaster Relief Program</label>
+               </div>
+           </nav>
 
-    <div class="row align-items-center">
-      <div class="col-sm-2"><p id="value-range"></p></div>
-      <div class="col-sm"><div id="slider-range"></div></div>
-    </div>
-    <button id="update-button" type="button" class="btn btn-primary">Update</button>
+ <div class="main-container">
+    
+       <div class="row align-items-center">
+               <div class="col-sm-2"><p id="value-range"></p></div>
+               <div class="col-sm"><div id="slider-range"></div></div>
+             </div>
+   <button id="update-button" type="button" class="btn btn-primary align-items-center">Update</button>
+   <div id="location-selector-div" class="location-checkbox"></div>
+ 
+   <div class="row">
+       <div class="col">
+           <div id="line-graph-div"></div>       
+       </div>
 
-    <div class="row">
+       <div>
+            <div class="tab row">
+                   <button class="tablinks" onclick="changeTab(event, 'Map')" id="defaultOpen">Map</button>
+                   <button class="tablinks" onclick="changeTab(event, 'stack')">Stack</button>
+            </div>
 
-        <div class="col-10">
-            <div id="line-graph-div"></div>
-        </div>
+            <div id="Map" class="tabcontent row">
+                   <h3>Map</h3>
+                   <div id="map-div"></div>
+                  
+       </div>
+       <div id="stack" class="tabcontent row">
+               <h3>Incoming Responses</h3>
+               <div id="main" class="col">
+                       <svg id="stack-svg-id" width="700" height="380" style="background:#ffffff"></svg>
+                   </div>
+       </div>
+       </div>
+     
+      
+       <div id="main" class="col">
+           <svg id="stack-svg-id" width="700" height="380" style="background:#ffffff"></svg>
+       </div>
+      
+   </div>
+</div>
 
-        <div class="col-2">
-          <div class="row">
-              <h4>Please pick a damage area</h4>
-              <div class="damage_category_picker_div">
-                  <select id="damage_area_select" form="carform">
-                      <option value="" disabled selected>Select a damage area</option>
-                  </select>
-              </div>
-              <div id="area-selector-div" class="col-6"></div>
-              <div id="location-selector-div" class="col-6"></div>
-          </div> 
-        </div>
-    </div>
+   <!-- <div class="col-3">
+       <div class="row">
+           <h4>Please pick a damage area</h4>
+           <div class="damage_category_picker_div">
+               <select class="damage_area_select" form="carform">
+                   <option value="" disabled selected>Select a damage area</option>
+               </select>
+           </div>
+           <div id="area-selector-div" class="col-6"></div>
+       
+       </div>
+     </div> -->
 
-    <div id="map-div"></div>
+   <!-- <div id="map-div" style="background: #c4c2c2"></div> -->
 
-    <div id="main">
-        <svg id="stack-svg-id" width="1160" height="600" style="background:#c4c2c2"></svg>
-    </div>
-
-  <!-- load the d3.js library -->    	
-  <!-- <script src="/javascript/helper/d3v4.js"></script> -->
-  <script src="/javascript/helper/d3v5.js"></script>
-  <!-- load kien script -->
-  <script src="/javascript/helper_functions.js"></script>
-  <script src="/javascript/kien.js"></script>
-  <script src="/javascript/map.js"></script>
-  <!-- load Miranda script -->
-  <script src="/javascript/stackBarChart.js"></script>
+ <!-- load the d3.js library -->       
+ <!-- <script src="/javascript/helper/d3v4.js"></script> -->
+ <script src="/javascript/helper/d3v5.js"></script>
+ <!-- load kien script -->
+ <script src="/javascript/helper_functions.js"></script>
+ <script src="/javascript/kien.js"></script>
+ <script src="/javascript/map.js"></script>
+ <!-- load Miranda script -->
+ <script src="/javascript/stackBarChart.js"></script>
 
 </body>
+
+
