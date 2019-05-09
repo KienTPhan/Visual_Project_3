@@ -34,8 +34,8 @@ var valuelineTest = d3.line() // TODO: make it so its dynamic not just mean of b
     .y(function(d) { return y(d.value.mean_buildings); });
 
 // set the colour scale
-var color = d3.scaleOrdinal(['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3','#000075','#a9a9a9','#ffffff','#000000']);
-debugger;
+var color = d3.scaleOrdinal(['#c45a74', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', '#d8d186', '#800000', '#aaffc3','#000075','#a9a9a9','#ef7056','#000000']);
+
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
                                 .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
@@ -250,7 +250,12 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
             // Add the checkboxes
             
-            locationSelectorDiv.append("input")
+            var check_box = locationSelectorDiv.append("label")
+                                .attr('class','container')
+                                .attr('for','location-selector'+d.key.replace(/\s+/g, ''))
+                                        .text(d.key);
+            
+            check_box.append("input")
                 .attr('type','checkbox')
                 .attr('id','location-selector'+d.key.replace(/\s+/g, ''))
                 .attr('name','location-selector'+d.key.replace(/\s+/g, ''))
@@ -267,11 +272,11 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                         .style('pointer-events',newEvent);
                     // Update whether or not the elements are active
                     d.active = active;
-                    })
+                    });
 
-            locationSelectorDiv.append('label')
-                    .attr('for','location-selector'+d.key.replace(/\s+/g, ''))
-                    .text(d.key);
+            check_box.append("span")
+                    .attr("class","checkmark");
+                    
                         
  
       }); 
