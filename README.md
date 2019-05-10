@@ -8,7 +8,7 @@ In this visualization, the user will see 6 line graphs, each representing a diff
 As you look over the maps, the user will notice that Location 3 is always a darker color which means that it is constantly in a damage state. This means that the responder will likely go to this location for aiding the citizens there. 
 ![Screen Shot 2019-05-10 at 3 06 12 PM](https://user-images.githubusercontent.com/32583946/57553896-81d21300-7335-11e9-8e03-1e7fd5b8cf77.png)
 ![Screen Shot 2019-05-10 at 3 06 30 PM](https://user-images.githubusercontent.com/32583946/57553884-7979d800-7335-11e9-9fa3-f6b04ea2996f.png)
-![Screen Shot 2019-05-10 at 3 06 30 PM](https://user-images.githubusercontent.com/32583946/57553884-7979d800-7335-11e9-9fa3-f6b04ea2996f.png
+![Screen Shot 2019-05-10 at 3 06 30 PM](https://user-images.githubusercontent.com/32583946/57553884-7979d800-7335-11e9-9fa3-f6b04ea2996f.png)
 ![Screen Shot 2019-05-10 at 3 06 39 PM](https://user-images.githubusercontent.com/32583946/57553881-75e65100-7335-11e9-81d1-8416c0e71c96.png)
 ![Screen Shot 2019-05-10 at 3 06 52 PM](https://user-images.githubusercontent.com/32583946/57553869-71ba3380-7335-11e9-8416-118bf5b0e58d.png)
 ![Screen Shot 2019-05-10 at 3 06 59 PM](https://user-images.githubusercontent.com/32583946/57553863-6e26ac80-7335-11e9-8212-35a99a327e73.png)
