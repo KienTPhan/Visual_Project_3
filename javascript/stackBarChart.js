@@ -258,16 +258,6 @@ case "power":
 
 default: break;
       }
-
-  // // format data
-  // var nested_data_by_building = d3.nest()
-  //    .key(function(d) { return d.location; })
-  //    .key(function(d) { return d.buildings; })
-  //   .rollup(function(d) {return d.length; })
-  //     // .rollup(function(d) { total += d.length; return {total: total, value: d.length} })
-  //    // .rollup(function(v) { return d3.sum(v, function(d) {  return d.value; }); })
-  //    .entries(data);
-
   
   var numResponseForEachLocationArr = [];
   var keyForEachLocationArr =[]

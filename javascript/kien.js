@@ -407,6 +407,9 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
     //! Add code for stack HERE
     draw_new_stack("sewer_and_water", formatedData);
+    draw_new_stack("power", formatedData);
+    draw_new_stack("roads_and_bridges", formatedData);
+    draw_new_stack("medical", formatedData);
     
 
     // show the first location TODO: make this dinamic not hardcoded
