@@ -10,7 +10,7 @@ var map_color = d3.scaleQuantile()
                 ]);
 
 var mapMargin = { top: 50, left: 50, right: 50, bottom: 50},
-    mapHeight = 310 - mapMargin.top - mapMargin.bottom,
+    mapHeight = 328 - mapMargin.top - mapMargin.bottom,
     mapWidth     = 800 - mapMargin.left - mapMargin.right;
 
 var map_svg = d3.select("#map-div")
