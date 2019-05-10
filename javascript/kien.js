@@ -399,13 +399,14 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
    //! ADD CODE HERE
    draw_new_line_graph("shake_intensity");
-   draw_new_line_graph("shake_intensity");
    draw_new_line_graph("sewer_and_water");
    draw_new_line_graph("power");
    draw_new_line_graph("roads_and_bridges");
    draw_new_line_graph("medical");
 
     // ! Add code here - to create other maps
+    draw_new_map("buildings");
+    updateMap_damage_area(data,"buildings");
     draw_new_map("shake_intensity");
     updateMap_damage_area(data,"shake_intensity");
     draw_new_map("sewer_and_water");
@@ -509,9 +510,10 @@ function update(start_date,end_date) {
    reDrawLineGraphFor_damage_area(newData,aggregated_data,"medical");
 
 
-   updateMap(newData);
+//    updateMap(newData);
 
    //! Add code here- for update map
+   updateMap_damage_area(newData,"buildings");
    updateMap_damage_area(newData,"shake_intensity");
    updateMap_damage_area(newData,"sewer_and_water");
    updateMap_damage_area(newData,"power");
@@ -726,7 +728,7 @@ function draw_new_line_graph(damage_area){
        })
   
        // draw map
-       updateMap(data);
+    //    updateMap(data);
   
        // draw stack bar chart
        updateStackBarChart(data);
