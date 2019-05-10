@@ -192,3 +192,9 @@ function handle_missing_data_to_show_users(data) {
     return data;
   }
 }
+
+
+// Draw other maps
+function draw_new_map(damage_area) {
+
+}

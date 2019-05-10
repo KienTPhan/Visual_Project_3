@@ -501,14 +501,11 @@ function update(start_date,end_date) {
 
     // Add code here- for update stacks
     updateStackBarChart(newData);
-    updateStackBarChartDamageArea(newData,"shake_intensity");    
+    // updateStackBarChartDamageArea(newData,"shake_intensity");    
     // updateStackBarChartDamageArea(newData,"sewer_and_water");
     // updateStackBarChartDamageArea(newData,"power");
     // updateStackBarChartDamageArea(newData,"roads_and_bridges");
     // updateStackBarChartDamageArea(newData,"medical");
-
-
-
 }
 
 function reDrawLineGraph(newData,newAggregateData){
@@ -583,10 +580,6 @@ function reDrawLineGraphFor_damage_area(newData,newAggregateData,damage_area){
 
 }
 
-function redraw_stack_damage_area(damage_area){
-
-}
-
 function changeTab(evt, cityName) {
     // Declare all variables
     var i, tabcontent, tablinks;
@@ -605,7 +598,6 @@ function changeTab(evt, cityName) {
     evt.currentTarget.className += " active";
   }
   document.getElementById("defaultOpen").click();
- 
 
 // TODO: WORKING 
 
