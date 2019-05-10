@@ -29,15 +29,33 @@ var valueline = d3.line()
 
 // define the line TEST
 var valuelineFor_sewer_and_water = d3.line() // TODO: make it so its dynamic not just mean of building
-    .defined(function (d) { return d.buildings !== null; })
+    .defined(function (d) { return d.sewer_and_water !== null; })
     .x(function(d) { return x(d.key); })
     .y(function(d) { return y(d.value.mean_sewer_and_water);});
 
 // define the line TEST
 var valuelineFor_power = d3.line() // TODO: make it so its dynamic not just mean of building
-    .defined(function (d) { return d.buildings !== null; })
+    .defined(function (d) { return d.power !== null; })
     .x(function(d) { return x(d.key); })
     .y(function(d) { return y(d.value.mean_Power);});
+
+// define the line TEST
+var valuelineFor_roads_and_bridges = d3.line() // TODO: make it so its dynamic not just mean of building
+    .defined(function (d) { return d.roads_and_bridges !== null; })
+    .x(function(d) { return x(d.key); })
+    .y(function(d) { return y(d.value.mean_roads_and_bridges);});
+
+// define the line TEST
+var valuelineFor_medical = d3.line() // TODO: make it so its dynamic not just mean of building
+.defined(function (d) { return d.medical !== null; })
+.x(function(d) { return x(d.key); })
+.y(function(d) { return y(d.value.mean_medical);});
+
+// define the line TEST
+var valuelineFor_shake_intensity = d3.line() // TODO: make it so its dynamic not just mean of building
+.defined(function (d) { return d.shake_intensity !== null; })
+.x(function(d) { return x(d.key); })
+.y(function(d) { return y(d.value.mean_shake_intensity);});
 
     
 
@@ -302,6 +320,24 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                      .transition().duration(100) 
                      .style("opacity", newOpacity)
                      .style('pointer-events',newEvent);
+
+                     // Hide or show the lines based on the ID FOR ROADS
+                     d3.select("#tag"+d.key.replace(/\s+/g, '')+"roads_and_bridges")
+                     .transition().duration(100) 
+                     .style("opacity", newOpacity)
+                     .style('pointer-events',newEvent);
+
+                      // Hide or show the lines based on the ID FOR MEDICAL
+                      d3.select("#tag"+d.key.replace(/\s+/g, '')+"medical")
+                      .transition().duration(100) 
+                      .style("opacity", newOpacity)
+                      .style('pointer-events',newEvent);
+
+                      // Hide or show the lines based on the ID FOR SHAKE INTENSITY
+                      d3.select("#tag"+d.key.replace(/\s+/g, '')+"shake_intensity")
+                      .transition().duration(100) 
+                      .style("opacity", newOpacity)
+                      .style('pointer-events',newEvent);
 //! ADD CODE HERE
                     
                     // Update whether or not the elements are active
@@ -361,8 +397,12 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
       });
 
     //! ADD CODE HERE
+    draw_new_line_graph("shake_intensity");
     draw_new_line_graph("sewer_and_water");
     draw_new_line_graph("power");
+    draw_new_line_graph("roads_and_bridges");
+    draw_new_line_graph("medical");
+    
 
     // show the first location TODO: make this dinamic not hardcoded
     document.getElementById('location-selector1').click();
