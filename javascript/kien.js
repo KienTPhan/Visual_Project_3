@@ -479,6 +479,15 @@ function update(start_date,end_date) {
     })
 
     reDrawLineGraph(newData,aggregated_data);
+
+// ! Add code here - for update other linegraphs
+    reDrawLineGraphFor_damage_area(newData,aggregated_data,"shake_intensity");
+    reDrawLineGraphFor_damage_area(newData,aggregated_data,"sewer_and_water");
+    reDrawLineGraphFor_damage_area(newData,aggregated_data,"power");
+    reDrawLineGraphFor_damage_area(newData,aggregated_data,"roads_and_bridges");
+    reDrawLineGraphFor_damage_area(newData,aggregated_data,"medical");
+
+
     updateMap(newData);
     updateStackBarChart(newData);
 
@@ -504,6 +513,40 @@ function reDrawLineGraph(newData,newAggregateData){
         svg.select('#tag' + d.key.replace(/\s+/g, ''))
             .duration(750)
             .attr("d", valuelineFor_Aggregate_Data(d.values));
+        
+    });
+
+
+    svg.select(".x.axis") // change the x axis
+        .transition()
+        .duration(750)
+        .call(xAxis)
+        .selectAll("text")	
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-15)")
+    svg.select(".y.axis") // change the y axis
+        .duration(750)
+        .call(yAxis);
+
+}
+
+function reDrawLineGraphFor_damage_area(newData,newAggregateData,damage_area){
+
+    // group data by location
+    var group_data_by_location = d3.nest()
+        .key(function(d) { return d.location; })
+        .entries(newData);
+
+    // Select the section we want to apply our changes to
+    var svg = d3.select("#line-graph-div-"+damage_area).transition();
+    // Loop through each symbol / key
+    newAggregateData.forEach(function(d,i) { 
+        // Add the lines of each location
+        svg.select('#tag' + d.key.replace(/\s+/g, '')+damage_area)
+            .duration(750)
+            .attr("d", eval("valuelineFor_"+damage_area +"(d.values)"));
         
     });
 
