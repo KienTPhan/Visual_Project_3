@@ -497,7 +497,14 @@ function update(start_date,end_date) {
 
 
     updateMap(newData);
+
+    // Add code here- for update stacks
     updateStackBarChart(newData);
+    // updateStackBarChartDamageArea(newData,"sewer_and_water");
+    // updateStackBarChartDamageArea(newData,"power");
+    // updateStackBarChartDamageArea(newData,"roads_and_bridges");
+    // updateStackBarChartDamageArea(newData,"medical");
+
 
 
 }
@@ -571,6 +578,10 @@ function reDrawLineGraphFor_damage_area(newData,newAggregateData,damage_area){
     svg.select(".y.axis") // change the y axis
         .duration(750)
         .call(yAxis);
+
+}
+
+function redraw_stack_damage_area(damage_area){
 
 }
 
@@ -694,7 +705,8 @@ function draw_new_line_graph(damage_area){
         updateMap(data);
     
         // draw stack bar chart
-        updateStackBarChart(data)
+        updateStackBarChart(data);
+
     
         // Scale the range of the data
         x.domain(d3.extent(data, function(d) { return d.time; }));
