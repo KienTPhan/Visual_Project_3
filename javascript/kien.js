@@ -243,7 +243,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
 
                //show current map path of the hovered line
-               d3.select('#map_path_id_'+current_location_id)
+               d3.select('#map_path_id_'+current_location_id + "_buildings")
                    .classed('mapHovered',true);
 
                d3.select(this).classed('line_hovered',true);
@@ -263,7 +263,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                        .style("opacity", 0);   
 
                //show current map path of the hovered line
-               d3.select('#map_path_id_'+current_location_id)
+               d3.select('#map_path_id_'+current_location_id + "_buildings")
                    .classed('mapHovered',false);
            });
   
@@ -509,7 +509,6 @@ function update(start_date,end_date) {
    reDrawLineGraphFor_damage_area(newData,aggregated_data,"roads_and_bridges");
    reDrawLineGraphFor_damage_area(newData,aggregated_data,"medical");
 
-
 //    updateMap(newData);
 
    //! Add code here- for update map
@@ -645,7 +644,7 @@ function draw_new_line_graph(damage_area){
        .append("g")
        .attr("transform",
            "translate(" + line_graph_margin.left + "," + line_graph_margin.top + ")");
-
+    
    d3.csv("/data/challenge-data.csv").then(function(data) {
 
        // format the data
@@ -728,7 +727,7 @@ function draw_new_line_graph(damage_area){
        })
   
        // draw map
-    //    updateMap(data);
+       updateMap(data);
   
        // draw stack bar chart
        updateStackBarChart(data);
@@ -788,10 +787,10 @@ function draw_new_line_graph(damage_area){
            .attr("id", 'tag'+current_location.replace(/\s+/g, '')+damage_area) // assign an ID
            .attr("d", eval("valuelineFor_"+damage_area +"(d.values)"))
                .on('mouseover', function(d,i) {
-                   var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
-  
+                   var current_location_id = d3.select(this)._groups[0][0].id.slice(3,5);
+                   current_location_id = parseInt(current_location_id);
                    //show current map path of the hovered line
-                   d3.select('#map_path_id_'+current_location_id)
+                   d3.select('#map_path_id_'+ current_location_id + "_" + damage_area)
                        .classed('mapHovered',true);
   
                    d3.select(this).classed('line_hovered',true);
@@ -803,15 +802,16 @@ function draw_new_line_graph(damage_area){
                            .style("top", (d3.event.pageY - 28) + "px");                    
                })
                .on('mouseout', function(d){
-                   var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
-  
+                   var current_location_id = d3.select(this)._groups[0][0].id.slice(3,5);
+                   current_location_id = parseInt(current_location_id);
+
                    d3.select(this).classed('line_hovered',false);
                    div.transition()        
                            .duration(500)      
                            .style("opacity", 0);   
   
-                   //show current map path of the hovered line
-                   d3.select('#map_path_id_'+current_location_id)
+                   //hide current map path of the hovered line
+                   d3.select('#map_path_id_'+current_location_id + "_" + damage_area)
                        .classed('mapHovered',false);
                });        
       

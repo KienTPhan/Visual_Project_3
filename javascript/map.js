@@ -318,9 +318,21 @@ function updateMap_damage_area(newData,damage_area) {
         })
         .attr('stroke', '#333333')
         .attr('id', function(d) {
-          return 'map_path_id_'+d.properties.Id;
+          return 'map_path_id_'+d.properties.Id+ "_" +damage_area;
         })
         .on('mouseover', function(d) {
+
+          var current_area =  d3.select(this)._groups[0][0].id.slice(14);
+
+          if (current_area === "buildings"){
+            //show current map path of the hovered line
+            d3.select('#tag'+ d.properties.Id)
+              .classed('line_hovered',true);
+          } else {  
+            // show current map path of the hovered line
+            d3.select('#tag'+ d.properties.Id + current_area)
+            .classed('line_hovered',true);
+          }
 
           var damage_val = handle_missing_data_to_show_users(d.properties.damage_value);
 
@@ -333,14 +345,27 @@ function updateMap_damage_area(newData,damage_area) {
                     .style("top", (d3.event.pageY - 28) + "px");					
         })
         .on('mouseout', function(d){
+          var current_area =  d3.select(this)._groups[0][0].id.slice(14);
+
           d3.select(this).classed('mapHovered',false);
           div.transition()		
                     .duration(500)		
-                    .style("opacity", 0);	
+                    .style("opacity", 0);
+                    
+          if (d3.select(this)._groups[0][0].id.slice(14) === "buildings"){
+            //hide current map path of the hovered line
+            d3.select('#tag'+ d.properties.Id)
+            .classed('line_hovered',false);    
+          } else {  
+            // show current map path of the hovered line
+            d3.select('#tag'+ d.properties.Id + current_area)
+            .classed('line_hovered',false);
+          }
+        
         });
 
-  // remove old map with old data
-  exit.remove();
+    // remove old map with old data
+    exit.remove();
 
     })
 }

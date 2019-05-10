@@ -33,7 +33,7 @@
 }
 
 .mapHovered{
-  stroke: white;
+  stroke: rgb(94, 94, 94);
   stroke-dasharray: 5px;
   stroke-width: 8px;
 }
