@@ -501,7 +501,6 @@ function update(start_date,end_date) {
 
     // Add code here- for update stacks
     updateStackBarChart(newData);
-<<<<<<< HEAD
     //updateStackBarChart2(newData);
     updateStackBarChartDamageArea(newData,"shake_intensity");
     updateStackBarChartDamageArea(newData,"sewer_and_water");
@@ -511,7 +510,6 @@ function update(start_date,end_date) {
 
 
 
-=======
     // updateStackBarChartDamageArea(newData,"shake_intensity");    
     updateStackBarChart(newData,"buildings");
   //  updateStackBarChartDamageArea(newData,"shake_intensity");    
@@ -519,7 +517,6 @@ function update(start_date,end_date) {
     // updateStackBarChartDamageArea(newData,"power");
     // updateStackBarChartDamageArea(newData,"roads_and_bridges");
     // updateStackBarChartDamageArea(newData,"medical");
->>>>>>> 3a204720ad70a55fa46f34634b33587a8fe93a49
 }
 
 function reDrawLineGraph(newData,newAggregateData){
