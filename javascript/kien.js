@@ -214,7 +214,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
    .attr("y", -45)
    .attr("dy", ".75em")
    .attr("transform", "rotate(-90)")
-   .text("damage scale");
+   .text("Damage scale");
 
    // Add clip path to hide data outside chart domain
    svg.append("defs").append("clipPath")
@@ -425,11 +425,59 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
    draw_new_stack("roads_and_bridges", formatedData);
    draw_new_stack("medical", formatedData);
   
+     // add functionality to update button
+     d3.select("#select-all-button").on("click", function() {
+       selectAll();
+      });
+   
+   
+   // show the first location TODO: make this dynamic not hardcoded
 
-   // show the first location TODO: make this dinamic not hardcoded
+
    document.getElementById('location-selector1').click();
+   document.getElementById('location-selector2').click();
+   document.getElementById('location-selector3').click();
+   document.getElementById('location-selector4').click();
+   document.getElementById('location-selector5').click();
+   document.getElementById('location-selector6').click();
+   document.getElementById('location-selector7').click();
+   document.getElementById('location-selector8').click();
+   document.getElementById('location-selector9').click();
+   document.getElementById('location-selector10').click();
+   document.getElementById('location-selector11').click();
+   document.getElementById('location-selector12').click();
+   document.getElementById('location-selector13').click();
+   document.getElementById('location-selector14').click();
+   document.getElementById('location-selector15').click();
+   document.getElementById('location-selector16').click();
+   document.getElementById('location-selector17').click();
+   document.getElementById('location-selector18').click();
+   document.getElementById('location-selector19').click();
+
 
 });
+
+    function selectAll() {
+        document.getElementById('location-selector1').click();
+        document.getElementById('location-selector2').click();
+        document.getElementById('location-selector3').click();
+        document.getElementById('location-selector4').click();
+        document.getElementById('location-selector5').click();
+        document.getElementById('location-selector6').click();
+        document.getElementById('location-selector7').click();
+        document.getElementById('location-selector8').click();
+        document.getElementById('location-selector9').click();
+        document.getElementById('location-selector10').click();
+        document.getElementById('location-selector11').click();
+        document.getElementById('location-selector12').click();
+        document.getElementById('location-selector13').click();
+        document.getElementById('location-selector14').click();
+        document.getElementById('location-selector15').click();
+        document.getElementById('location-selector16').click();
+        document.getElementById('location-selector17').click();
+        document.getElementById('location-selector18').click();
+        document.getElementById('location-selector19').click();
+    }
 
 // range dates TODO: Might need to find a way to make it dynamic base on data
 var start_date = new Date("Mon Apr 06 2020 00:00:00 GMT-0500 (Central Daylight Time)");

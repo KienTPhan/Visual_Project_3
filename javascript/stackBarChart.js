@@ -153,16 +153,18 @@ function updateStackBarChart(data){
      .attr("y", function(d) { return stack_y(d[1]); })
      .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
      .attr("width", stack_x.bandwidth())
-   .on("mouseover", function() { tooltip.style("display", null); })
-   .on("mouseout", function() { tooltip.style("display", "none"); })
-   .on("mousemove", function(d, i) {
-     // debugger;
-     // console.log(d);
-     var xPosition = d3.mouse(this)[0] - 5;
-     var yPosition = d3.mouse(this)[1] - 5;
-     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-     tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
-   });
+     .attr("stroke", 'black')
+     .attr("stroke-width", '.20')
+   .on("mouseover", function(d) { 
+    div.transition()		
+    .duration(200)		
+    .style("opacity", .9);		
+    div	.html("Number of Response: " +(d[1]-d[0])+ "<br/> Damage: "+(this.parentElement.__data__.key))	
+    .style("left", (d3.event.pageX) + "px")		
+    .style("top", (d3.event.pageY - 28) + "px");	
+  
+  });
+  
 //fix later for entering new bar or exiting new bar
 g.append("g")
     .attr("class", "axis")
@@ -181,32 +183,15 @@ g.append("g")
      .attr("font-weight", "bold")
      .attr("text-anchor", "start");
 
- //   var legend = g.append("g")
- //     .attr('id','legend_group')
- //     .attr("font-family", "sans-serif")
- //     .attr("font-size", 15)
- //     .attr("text-anchor", "end")
- //   .selectAll("g")
- //   .data(stackKeys.slice().reverse())
- //   .enter().append("g")
- //     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
- // legend.append("rect")
- //     .attr("x", width - 19)
- //     .attr("border-style","solid")
- //     .attr("width", 19)
- //     .attr("height", 19)
- //     .attr("fill", z);
-
- // legend.append("text")
- //     .attr("x", width - 24)
- //     .attr("y", 9.5)
- //     .attr("dy", "0.32em")
- //     .text(function(d) { return d; });
-
-// Temp quick fix that might stay: To chang legend y axis
-// d3.select('#legend_group')
-// .attr("transform", function(d, i) { return "translate(50,0)"; });
+   // adding y axis label
+   g.append("text")
+   .attr("class", "y label")
+   .attr("text-anchor", "end")
+   .attr("x", -height+175)
+   .attr("y", -45)
+   .attr("dy", ".75em")
+   .attr("transform", "rotate(-90)")
+   .text("Number of Response");
 
   
 }
@@ -328,35 +313,44 @@ default: break;
  stackFunction = d3.stack().keys(stackKeys);
 
  stackedData = stackFunction(sData);
-
+ var newGOnTheBlock = d3.select("#g-"+damage_area);
  // g.append("g")
  //   .attr("id","stack_container") // TEST
-   let damageLevelsGroups = g.selectAll("g")
-   .data(stackedData)
-   .join("g")
-     .attr("fill", function(d) { return z(d.key); })
-   .selectAll("rect")
-   .data(function(d) { return d; })
-   .join("rect")
-     //.attr("border-style","solid")
-     .attr("x", function(d){ return stack_x(d.data.location);})
-     .attr("y", function(d) { return stack_y(d[1]); })
-     .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
-     .attr("width", stack_x.bandwidth())
-   .on("mouseover", function() { tooltip.style("display", null); })
-   .on("mouseout", function() { tooltip.style("display", "none"); })
-   .on("mousemove", function(d, i) {
-     // debugger;
-     // console.log(d);
-     var xPosition = d3.mouse(this)[0] - 5;
-     var yPosition = d3.mouse(this)[1] - 5;
-     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-     tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
-   });
+ let damageLevelsGroups = newGOnTheBlock.selectAll("g")
+ .data(stackedData);
+ let damageLevelEnter = damageLevelsGroups.enter().append("g")
+   .attr("fill", function(d) { return z(d.key); });
+ damageLevelsGroups.exit().remove();
+ damageLevelsGroups = damageLevelEnter.merge(damageLevelsGroups);
+
+ let locationRects = damageLevelsGroups.selectAll("rect")
+ .data(function(d) { return d; });
+ let locationEnter = locationRects.enter().append("rect");
+ locationRects = locationEnter.merge(locationRects);
+   //.attr("border-style","solid")
+   locationRects.attr("x", function(d){ return stack_x(d.data.location);})
+   .attr("y", function(d) { return stack_y(d[1]); })
+   .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
+   .attr("width", stack_x.bandwidth())
+   .attr("stroke", 'black')
+    .attr("stroke-width", '.20')
+    .on("mouseover", function(d) { 
+      div.transition()		
+      .duration(200)		
+      .style("opacity", .9);		
+      div	.html("Number of Response: " +(d[1]-d[0])+ "<br/> Damage: "+(this.parentElement.__data__.key))	
+      .style("left", (d3.event.pageX) + "px")		
+      .style("top", (d3.event.pageY - 28) + "px");	
+    
+    });
 
 //fix later for entering new bar or exiting new bar
+ newGOnTheBlock.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(stack_x));
 
-   g.append("g")
+ newGOnTheBlock.append("g")
      .attr("class", "axis")
      .attr("id","stack_y_axis")
      .call(d3.axisLeft(stack_y).ticks(null, "s"))
@@ -368,37 +362,44 @@ default: break;
      .attr("font-weight", "bold")
      .attr("text-anchor", "start");
 
-     g.append("g")
-     .attr("class", "axis")
-     .attr("transform", "translate(0," + height + ")")
-     .call(d3.axisBottom(stack_x));
+  // adding y axis label
+newGOnTheBlock.append("text")
+.attr("class", "y label")
+.attr("text-anchor", "end")
+.attr("x", -height+175)
+.attr("y", -45)
+.attr("dy", ".75em")
+.attr("transform", "rotate(-90)")
+.text("Number of Response");
 
-//     var legend = g.append("g")
-//       .attr('id','legend_group')
-//       .attr("font-family", "sans-serif")
-//       .attr("font-size", 15)
-//       .attr("text-anchor", "end")
-//     .selectAll("g")
-//     .data(stackKeys.slice().reverse())
-//     .enter().append("g")
-//       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+ 
 
-//   legend.append("rect")
-//       .attr("x", width - 19)
-//       .attr("border-style","solid")
-//       .attr("width", 19)
-//       .attr("height", 19)
-//       .attr("fill", z);
 
-//   legend.append("text")
-//       .attr("x", width - 24)
-//       .attr("y", 9.5)
-//       .attr("dy", "0.32em")
-//       .text(function(d) { return d; });
+  var legend = stack_svg.append("g")
+.attr('id','legend_group')
+.attr("font-family", "sans-serif")
+.attr("font-size", 15)
+.attr("text-anchor", "end")
+.selectAll("g")
+.data(legend_data)
+.enter().append("g")
+.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-// // Temp quick fix that might stay: To chang legend y axis
-// d3.select('#legend_group')
-// .attr("transform", function(d, i) { return "translate(50,0)"; });
+legend.append("rect")
+.attr("x", mapWidth - 19)
+.attr("border-style","solid")
+.attr("width", 19)
+.attr("height", 19)
+.attr("fill", function(d){
+ return d.color;
+});
+
+legend.append("text")
+.attr("x", mapWidth - 24)
+.attr("y", 9.5)
+.attr("dy", "0.32em")
+.text(function(d) { return d.number; });
+
 
 }
 
@@ -534,16 +535,15 @@ default: break;
    .attr("y", function(d) { return stack_y(d[1]); })
    .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
    .attr("width", stack_x.bandwidth())
- .on("mouseover", function() { tooltip.style("display", null); })
- .on("mouseout", function() { tooltip.style("display", "none"); })
- .on("mousemove", function(d, i) {
-   // debugger;
-   // console.log(d);
-   var xPosition = d3.mouse(this)[0] - 5;
-   var yPosition = d3.mouse(this)[1] - 5;
-   tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-   tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
- });
+   .on("mouseover", function(d) { 
+    div.transition()		
+    .duration(200)		
+    .style("opacity", .9);		
+    div	.html("Number of Response: " +(d[1]-d[0])+ "<br/> Damage: "+(this.parentElement.__data__.key))	
+    .style("left", (d3.event.pageX) + "px")		
+    .style("top", (d3.event.pageY - 28) + "px");	
+  
+  });
 
 //fix later for entering new bar or exiting new bar
  newGOnTheBlock.append("g")
@@ -562,179 +562,19 @@ default: break;
      .attr("fill", "#000")
      .attr("font-weight", "bold")
      .attr("text-anchor", "start");
-
-//     var legend = g.append("g")
-//       .attr('id','legend_group')
-//       .attr("font-family", "sans-serif")
-//       .attr("font-size", 15)
-//       .attr("text-anchor", "end")
-//     .selectAll("g")
-//     .data(stackKeys.slice().reverse())
-//     .enter().append("g")
-//       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-//   legend.append("rect")
-//       .attr("x", width - 19)
-//       .attr("border-style","solid")
-//       .attr("width", 19)
-//       .attr("height", 19)
-//       .attr("fill", z);
-
-//   legend.append("text")
-//       .attr("x", width - 24)
-//       .attr("y", 9.5)
-//       .attr("dy", "0.32em")
-//       .text(function(d) { return d; });
-
-// // Temp quick fix that might stay: To chang legend y axis
-// d3.select('#legend_group')
-// .attr("transform", function(d, i) { return "translate(50,0)"; });
-
+     
+// adding y axis label
+newGOnTheBlock.append("text")
+.attr("class", "y label")
+.attr("text-anchor", "end")
+.attr("x", -height+175)
+.attr("y", -45)
+.attr("dy", ".75em")
+.attr("transform", "rotate(-90)")
+.text("Number of Response");
   
-}
+ }
 
 
-// function updateStackBarChart2(data){
-//   stack_svg = d3.select("#main").select("#stack-div-shake_intensity"),
-//   margin = {top: 50, right: 50, bottom: 50, left: 70},
-//   width = +stack_svg.attr("width") - margin.left - margin.right,
-//   height = +stack_svg.attr("height") - margin.top - margin.bottom,
-//   g = stack_svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-//   // filter building column
-//   data = data.filter(d=>d.medical!=="-0.0" && d.buildings!=="-0.0" && d.roads_and_bridges!=="-0.0" && d.power!=="-0.0" && d.sewer_and_water!=="-0.0");
-//   data = data.filter(d=>d.location!=="");
-//   data = data.filter(d=>d.buildings!=="");
-//   data = data.filter(d=>d.location!=="7");
-
-//   // format data
-//   var nested_data_by_shake_intensity = d3.nest()
-//      .key(function(d) { return d.location; })
-//      .key(function(d) { return d.shake_intensity; })
-//     .rollup(function(d) {return d.length; })
-//       // .rollup(function(d) { total += d.length; return {total: total, value: d.length} })
-//      // .rollup(function(v) { return d3.sum(v, function(d) {  return d.value; }); })
-//      .entries(data);
-
- //   var numResponseForEachLocationArr = [];
-//   var keyForEachLocationArr =[]
-
-//   // fill in the array above
-//   nested_data_by_shake_intensity.forEach(function(datum) {
-//   // go through every location and add all the #response
-//   keyForEachLocationArr.push(datum.key);
-//   eachLocationData = datum.values;
-//   let total = 0;
-//   eachLocationData.forEach(function(d){
-//     total += d.value;
-//   })
-//   numResponseForEachLocationArr.push(total);
-//   });
-
-//   //! WARNING: might need fix
-//   keyForEachLocationArr.sort((a, b)=>{return +a - (+b);});
-//   //console.log(keyForEachLocationArr);
-//   var keys = d3.range(keyForEachLocationArr);
-
-//   sData = nested_data_by_shake_intensity.map(d => {
-//     //debugger;
-//   let result = {};
-//   result.location = d.key;
-//   d.values.forEach(d=>{
-//     result[d.key] = d.value;
-//   });
-//   return result;
-//   })
-// //console.log(sData[0]);
-//   // sort the stackkeys
-//   stackKeys = d3.keys(sData[0]).splice(0,Object.keys(sData[0]).length -1).sort((a, b)=>{return +a - (+b);});
-
-//   // console.log(stackKeys);
-
-//   // update the domain for axis
-//   stack_x.domain(keyForEachLocationArr);
-//   stack_y.domain([0, d3.max(numResponseForEachLocationArr)]).nice();
-//   z.domain(stackKeys);
-
-//   stackFunction = d3.stack().keys(stackKeys);
-//   //console.log("heyyyyy"+ stackKeys);
-
-//   stackedData = stackFunction(sData);
-
-//   // g.append("g")
-//   //   .attr("id","stack_container") // TEST
-//   let damageLevelsGroups = g.selectAll("g")
-//     .data(stackedData);
-//     let damageLevelEnter = damageLevelsGroups.enter().append("g")
-//       .attr("fill", function(d) { return z(d.key); });
-//     damageLevelsGroups.exit().remove();
-//     damageLevelsGroups = damageLevelEnter.merge(damageLevelsGroups);
-
-//     let locationRects = damageLevelsGroups.selectAll("rect")
-//     .data(function(d) { return d; });
-//     let locationEnter = locationRects.enter().append("rect");
-//     locationRects = locationEnter.merge(locationRects);
-//       //.attr("border-style","solid")
-//       locationRects.attr("x", function(d){ return stack_x(d.data.location);})
-//       .attr("y", function(d) { return stack_y(d[1]); })
-//       .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
-//       .attr("width", stack_x.bandwidth())
-//     .on("mouseover", function() { tooltip.style("display", null); })
-//     .on("mouseout", function() { tooltip.style("display", "none"); })
-//     .on("mousemove", function(d, i) {
-//       // debugger;
-//       // console.log(d);
-//       var xPosition = d3.mouse(this)[0] - 5;
-//       var yPosition = d3.mouse(this)[1] - 5;
-//       tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-//       tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
-//     });
-// //fix later for entering new bar or exiting new bar
-//  g.append("g")
-//      .attr("class", "axis")
-//      .attr("transform", "translate(0," + height + ")")
-//      .call(d3.axisBottom(stack_x));
-
-//     g.append("g")
-//       .attr("class", "axis")
-//       .attr("id","stack_y_axis")
-//       .call(d3.axisLeft(stack_y).ticks(null, "s"))
-//     .append("text")
-//       .attr("x", 2)
-//       .attr("y", stack_y(stack_y.ticks().pop()) + 0.5)
-//       .attr("dy", "0.32em")
-//       .attr("fill", "#000")
-//       .attr("font-weight", "bold")
-//       .attr("text-anchor", "start");
-
-//   //   var legend = g.append("g")
-//   //     .attr('id','legend_group')
-//   //     .attr("font-family", "sans-serif")
-//   //     .attr("font-size", 15)
-//   //     .attr("text-anchor", "end")
-//   //   .selectAll("g")
-//   //   .data(stackKeys.slice().reverse())
-//   //   .enter().append("g")
-//   //     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-//   // legend.append("rect")
-//   //     .attr("x", width - 19)
-//   //     .attr("border-style","solid")
-//   //     .attr("width", 19)
-//   //     .attr("height", 19)
-//   //     .attr("fill", z);
-
-//   // legend.append("text")
-//   //     .attr("x", width - 24)
-//   //     .attr("y", 9.5)
-//   //     .attr("dy", "0.32em")
-//   //     .text(function(d) { return d; });
-
-// // Temp quick fix that might stay: To chang legend y axis
-// // d3.select('#legend_group')
-// // .attr("transform", function(d, i) { return "translate(50,0)"; });
-
-  
-// }
 
 
