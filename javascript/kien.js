@@ -214,7 +214,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
    .attr("y", -45)
    .attr("dy", ".75em")
    .attr("transform", "rotate(-90)")
-   .text("damage scale");
+   .text("Damage scale");
 
    // Add clip path to hide data outside chart domain
    svg.append("defs").append("clipPath")

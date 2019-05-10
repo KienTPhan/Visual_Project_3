@@ -181,32 +181,15 @@ g.append("g")
      .attr("font-weight", "bold")
      .attr("text-anchor", "start");
 
- //   var legend = g.append("g")
- //     .attr('id','legend_group')
- //     .attr("font-family", "sans-serif")
- //     .attr("font-size", 15)
- //     .attr("text-anchor", "end")
- //   .selectAll("g")
- //   .data(stackKeys.slice().reverse())
- //   .enter().append("g")
- //     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
- // legend.append("rect")
- //     .attr("x", width - 19)
- //     .attr("border-style","solid")
- //     .attr("width", 19)
- //     .attr("height", 19)
- //     .attr("fill", z);
-
- // legend.append("text")
- //     .attr("x", width - 24)
- //     .attr("y", 9.5)
- //     .attr("dy", "0.32em")
- //     .text(function(d) { return d; });
-
-// Temp quick fix that might stay: To chang legend y axis
-// d3.select('#legend_group')
-// .attr("transform", function(d, i) { return "translate(50,0)"; });
+   // adding y axis label
+   g.append("text")
+   .attr("class", "y label")
+   .attr("text-anchor", "end")
+   .attr("x", -height+175)
+   .attr("y", -45)
+   .attr("dy", ".75em")
+   .attr("transform", "rotate(-90)")
+   .text("Number of Response");
 
   
 }
@@ -328,35 +311,43 @@ default: break;
  stackFunction = d3.stack().keys(stackKeys);
 
  stackedData = stackFunction(sData);
-
+ var newGOnTheBlock = d3.select("#g-"+damage_area);
  // g.append("g")
  //   .attr("id","stack_container") // TEST
-   let damageLevelsGroups = g.selectAll("g")
-   .data(stackedData)
-   .join("g")
-     .attr("fill", function(d) { return z(d.key); })
-   .selectAll("rect")
-   .data(function(d) { return d; })
-   .join("rect")
-     //.attr("border-style","solid")
-     .attr("x", function(d){ return stack_x(d.data.location);})
-     .attr("y", function(d) { return stack_y(d[1]); })
-     .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
-     .attr("width", stack_x.bandwidth())
-   .on("mouseover", function() { tooltip.style("display", null); })
-   .on("mouseout", function() { tooltip.style("display", "none"); })
-   .on("mousemove", function(d, i) {
-     // debugger;
-     // console.log(d);
-     var xPosition = d3.mouse(this)[0] - 5;
-     var yPosition = d3.mouse(this)[1] - 5;
-     tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-     tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
-   });
+ let damageLevelsGroups = newGOnTheBlock.selectAll("g")
+ .data(stackedData);
+ let damageLevelEnter = damageLevelsGroups.enter().append("g")
+   .attr("fill", function(d) { return z(d.key); });
+ damageLevelsGroups.exit().remove();
+ damageLevelsGroups = damageLevelEnter.merge(damageLevelsGroups);
+
+ let locationRects = damageLevelsGroups.selectAll("rect")
+ .data(function(d) { return d; });
+ let locationEnter = locationRects.enter().append("rect");
+ locationRects = locationEnter.merge(locationRects);
+   //.attr("border-style","solid")
+   locationRects.attr("x", function(d){ return stack_x(d.data.location);})
+   .attr("y", function(d) { return stack_y(d[1]); })
+   .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
+   .attr("width", stack_x.bandwidth())
+ .on("mouseover", function() { tooltip.style("display", null); })
+ .on("mouseout", function() { tooltip.style("display", "none"); })
+ .on("mousemove", function(d, i) {
+   // debugger;
+   // console.log(d);
+   var xPosition = d3.mouse(this)[0] - 5;
+   var yPosition = d3.mouse(this)[1] - 5;
+   tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+   tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
+ });
 
 //fix later for entering new bar or exiting new bar
+ newGOnTheBlock.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(stack_x));
 
-   g.append("g")
+ newGOnTheBlock.append("g")
      .attr("class", "axis")
      .attr("id","stack_y_axis")
      .call(d3.axisLeft(stack_y).ticks(null, "s"))
@@ -368,37 +359,31 @@ default: break;
      .attr("font-weight", "bold")
      .attr("text-anchor", "start");
 
-     g.append("g")
-     .attr("class", "axis")
-     .attr("transform", "translate(0," + height + ")")
-     .call(d3.axisBottom(stack_x));
+  var legend = stack_svg.append("g")
+.attr('id','legend_group')
+.attr("font-family", "sans-serif")
+.attr("font-size", 15)
+.attr("text-anchor", "end")
+.selectAll("g")
+.data(legend_data)
+.enter().append("g")
+.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-//     var legend = g.append("g")
-//       .attr('id','legend_group')
-//       .attr("font-family", "sans-serif")
-//       .attr("font-size", 15)
-//       .attr("text-anchor", "end")
-//     .selectAll("g")
-//     .data(stackKeys.slice().reverse())
-//     .enter().append("g")
-//       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+legend.append("rect")
+.attr("x", mapWidth - 19)
+.attr("border-style","solid")
+.attr("width", 19)
+.attr("height", 19)
+.attr("fill", function(d){
+ return d.color;
+});
 
-//   legend.append("rect")
-//       .attr("x", width - 19)
-//       .attr("border-style","solid")
-//       .attr("width", 19)
-//       .attr("height", 19)
-//       .attr("fill", z);
+legend.append("text")
+.attr("x", mapWidth - 24)
+.attr("y", 9.5)
+.attr("dy", "0.32em")
+.text(function(d) { return d.number; });
 
-//   legend.append("text")
-//       .attr("x", width - 24)
-//       .attr("y", 9.5)
-//       .attr("dy", "0.32em")
-//       .text(function(d) { return d; });
-
-// // Temp quick fix that might stay: To chang legend y axis
-// d3.select('#legend_group')
-// .attr("transform", function(d, i) { return "translate(50,0)"; });
 
 }
 
