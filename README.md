@@ -9,16 +9,22 @@ As you look over the maps, the user will notice that Location 3 is always a dark
 
 Figure 1.
 ![Screen Shot 2019-05-10 at 3 06 12 PM](https://user-images.githubusercontent.com/32583946/57553896-81d21300-7335-11e9-8e03-1e7fd5b8cf77.png)
+
 Figure 2
 ![Screen Shot 2019-05-10 at 3 06 30 PM](https://user-images.githubusercontent.com/32583946/57553884-7979d800-7335-11e9-9fa3-f6b04ea2996f.png)
+
 Figure 3
 ![Screen Shot 2019-05-10 at 3 06 30 PM](https://user-images.githubusercontent.com/32583946/57553884-7979d800-7335-11e9-9fa3-f6b04ea2996f.png)
+
 Figure 4
 ![Screen Shot 2019-05-10 at 3 06 39 PM](https://user-images.githubusercontent.com/32583946/57553881-75e65100-7335-11e9-81d1-8416c0e71c96.png)
+
 Figure 5
 ![Screen Shot 2019-05-10 at 3 06 52 PM](https://user-images.githubusercontent.com/32583946/57553869-71ba3380-7335-11e9-8416-118bf5b0e58d.png)
+
 Figure 6
 ![Screen Shot 2019-05-10 at 3 06 59 PM](https://user-images.githubusercontent.com/32583946/57553863-6e26ac80-7335-11e9-8212-35a99a327e73.png)
+
 Figure 7
 ![Screen Shot 2019-05-10 at 3 07 10 PM](https://user-images.githubusercontent.com/32583946/57553849-68c96200-7335-11e9-9831-51488b466824.png)
 
