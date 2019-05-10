@@ -539,7 +539,7 @@ default: break;
     div.transition()		
     .duration(200)		
     .style("opacity", .9);		
-    div	.html("Number of Response " +(d[1]-d[0])+ "<br/> Damage: "+(this.parentElement.__data__.key))	
+    div	.html("Number of Response: " +(d[1]-d[0])+ "<br/> Damage: "+(this.parentElement.__data__.key))	
     .style("left", (d3.event.pageX) + "px")		
     .style("top", (d3.event.pageY - 28) + "px");	
   
