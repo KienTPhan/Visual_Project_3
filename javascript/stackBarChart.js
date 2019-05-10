@@ -241,6 +241,13 @@ case "power":
       .rollup(function(d) {return d.length; })
       .entries(data);
       break;
+case "shake_intensity":
+      nested_data_by_category = d3.nest()
+      .key(function(d) { return d.location; })
+      .key(function(d) { return d.shake_intensity; })
+      .rollup(function(d) {return d.length; })
+      .entries(data);
+      break;
 
 default: break;
       }

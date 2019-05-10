@@ -406,6 +406,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     draw_new_line_graph("medical");
 
     //! Add code for stack HERE
+    draw_new_stack("shake_intensity", formatedData);
     draw_new_stack("sewer_and_water", formatedData);
     draw_new_stack("power", formatedData);
     draw_new_stack("roads_and_bridges", formatedData);
