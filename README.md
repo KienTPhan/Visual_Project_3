@@ -35,11 +35,12 @@ Figure 7
 ## 2: Use visual analytics to show uncertainty in the data. Compare the reliability of neighborhood reports. Which neighborhoods are providing reliable reports? Provide a rationale for your response. Limit your response to 1000 words and 10 images.
 Our visualization answers this question by providing a stack bar graph to show the damage score people report for locations. On the x asix, the user will see that all the locations are displayed in numerical order, making it easy to find a location. On the y axis, it displays the number of responses collected. The stack rectangles represent the damage score 0-10 (10 being the most damaged) in a color scale and the height of the those rectangles show the amount of people who chose that specific damage score. This compares the reliability of reports because the user will be able to see on the stack chart the various reports people submit. The majority damage score will most likely be the accuract damage score of the area. Unlike other smaller damage score reports since they will likely be the incorrect or the outlier in the data. In addition, users may hover over the the specific rectangles on the visualization for more details of that rectangle. Such details consist of the damage score and the number of responses for that damage score. Users may use the date slider to look more in depth a time period and the stack bar will represent each area in town on the stack bar graph.
 
-For example, if the user selects time period 04/06 19:14 To 04/08 20:18, the user notices that location 8 has a big rectangle that is a damage score of 5. Since this appears to be the largest number of inputs, the user can conclude that this damage score is most likely accuracte for this time period on that specific location. 
+For example, if the user selects time period 04/06 19:14 To 04/08 20:18 in section "Building", the user notices that location 8 has a big rectangle that is a damage score of 5. Since this appears to be the largest number of inputs, the user can conclude that this damage score is most likely accuracte for this time period on that specific location. The same can be said for location 9 as 6 being the damage score of that time period. 
 
 
 
 ![Screen Shot 2019-05-10 at 3 31 21 PM](https://user-images.githubusercontent.com/32583946/57555052-c4e1b580-7338-11e9-867f-4b6766c8736c.png)
+
 
 
 
