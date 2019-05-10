@@ -500,8 +500,8 @@ function update(start_date,end_date) {
     updateMap(newData);
 
     // Add code here- for update stacks
-    updateStackBarChart(newData);
-    updateStackBarChartDamageArea(newData,"shake_intensity");    
+    updateStackBarChart(newData,"buildings");
+  //  updateStackBarChartDamageArea(newData,"shake_intensity");    
     // updateStackBarChartDamageArea(newData,"sewer_and_water");
     // updateStackBarChartDamageArea(newData,"power");
     // updateStackBarChartDamageArea(newData,"roads_and_bridges");
