@@ -562,15 +562,16 @@ default: break;
      .attr("fill", "#000")
      .attr("font-weight", "bold")
      .attr("text-anchor", "start");
-// // adding y axis label
-// newGOnTheBlock.append("text")
-// .attr("class", "y label")
-// .attr("text-anchor", "end")
-// .attr("x", -height+175)
-// .attr("y", -45)
-// .attr("dy", ".75em")
-// .attr("transform", "rotate(-90)")
-// .text("Number of Response");
+     
+// adding y axis label
+newGOnTheBlock.append("text")
+.attr("class", "y label")
+.attr("text-anchor", "end")
+.attr("x", -height+175)
+.attr("y", -45)
+.attr("dy", ".75em")
+.attr("transform", "rotate(-90)")
+.text("Number of Response");
   
  }
 
