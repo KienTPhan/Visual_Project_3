@@ -180,7 +180,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     updateMap(data);
 
     // draw stack bar chart
-    updateStackBarChart(data)
+    // updateStackBarChart(data)
     
     // add buttons
     add_area_buttons(data);
@@ -405,6 +405,11 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     draw_new_line_graph("roads_and_bridges");
     draw_new_line_graph("medical");
 
+    // ! Add code here - to create other maps
+    draw_new_map("shake_intensity");
+    updateMap_damage_area(data,"shake_intensity");
+
+
     //! Add code for stack HERE
     draw_new_stack("shake_intensity", formatedData);
     draw_new_stack("sewer_and_water", formatedData);
@@ -497,12 +502,13 @@ function update(start_date,end_date) {
     reDrawLineGraphFor_damage_area(newData,aggregated_data,"medical");
 
 
+
     updateMap(newData);
 
     // Add code here- for update stacks
-    updateStackBarChart(newData);
+    // updateStackBarChart(newData);
     // updateStackBarChartDamageArea(newData,"shake_intensity");    
-    updateStackBarChart(newData,"buildings");
+    // updateStackBarChart(newData,"buildings");
   //  updateStackBarChartDamageArea(newData,"shake_intensity");    
     // updateStackBarChartDamageArea(newData,"sewer_and_water");
     // updateStackBarChartDamageArea(newData,"power");
@@ -701,7 +707,7 @@ function draw_new_line_graph(damage_area){
         updateMap(data);
     
         // draw stack bar chart
-        updateStackBarChart(data);
+        // updateStackBarChart(data);
 
     
         // Scale the range of the data
