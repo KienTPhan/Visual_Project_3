@@ -387,7 +387,6 @@ function updateStackBarChartDamageArea(data,damage_area){
  //var value = parseInt(document.getElementById("selectvalue").value);
  //console.log(value);
 
- debugger;
 switch(damage_area)
 {
   case "buildings": nested_data_by_category = d3.nest()
