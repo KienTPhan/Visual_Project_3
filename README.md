@@ -32,5 +32,24 @@ Our visualization answers this question by providing a stack bar graph to show t
 
 ## 3: How do conditions change over time? How does uncertainty in change over time? Describe the key changes you see. Limit your response to 500 words and 8 images.
 
-Contributers:
+The condition of the earth quake as reported by the user of the app will be shown via a line graphs. There will be 6 line graphs, one representing each reported damage areas. For example, the first line graph will show all the reported data for damage for buildings. For each of the line it will show the conditions of each neighborhood overtime. 
+
+<img width="963" alt="Screen Shot 2019-05-10 at 3 06 22 PM" src="https://user-images.githubusercontent.com/35431945/57553839-60712700-7335-11e9-880e-ce4e1452e3f9.png">
+
+
+To allow people to see uncertainty in change over time, our group created a stacked bar graph to show people exactly how many people reported for each location as well as how many people voted for each damage level. For example, if you use the slider and select the date range from 04/07 23:46 To 04/09 00:02 then you can see that there is a significantly more people reporting damages for location 8 or neighborhood 8.
+
+<img width="1631" alt="Screen Shot 2019-05-10 at 3 10 42 PM" src="https://user-images.githubusercontent.com/35431945/57554238-86e39200-7336-11e9-8ab2-f8907eefbec7.png">
+
+
+ We also allow people to hover over the stack to view how many people voted for each damage to allow them to see more details and see if the data is uncertain or not themselves. Looking at location 8 again, you can see that there is much more people reporting that buildings damage is about 5 to 6 out of 10 so that is probably the most accurate reports. 
+
+<img width="1637" alt="Screen Shot 2019-05-10 at 3 11 20 PM" src="https://user-images.githubusercontent.com/35431945/57554277-a67aba80-7336-11e9-85af-6ac80fae7acb.png">
+
+<img width="1618" alt="Screen Shot 2019-05-10 at 3 12 49 PM" src="https://user-images.githubusercontent.com/35431945/57554279-a7135100-7336-11e9-82cf-1213f1c1fd61.png">
+
+By doing this, we observed that the uncertainty for the reports are very high when we look at buildings damage over the range of three days.
+
+
+## Contributers:
 All team members put their fair share of work into the project. Miranda worked on the stack bar graph and the front end work in the project while Kien worked on the map and the line graph. Both team members assisted each other when a challenge posed, and offered to help each other throughout the project. 
