@@ -41,8 +41,8 @@ For example, if the user selects time period 04/06 19:14 To 04/08 20:18 in secti
 
 ![Screen Shot 2019-05-10 at 3 31 21 PM](https://user-images.githubusercontent.com/32583946/57555052-c4e1b580-7338-11e9-867f-4b6766c8736c.png)
 
-
-
+In the image below it can show where data is uncertain. For example, on location one for time period 04/06 00:00 To 04/07 00:18 in "Building" section the user will see a very small number of people reported a damage score in that location. In addition, when the user hovers over each rectangle in stack bar location 1 the user will see that each damage score has minimal reports and there are many various answers. This concludes that this time period for location 1 is uncertain. 
+![Screen Shot 2019-05-10 at 3 39 25 PM](https://user-images.githubusercontent.com/32583946/57555466-ef803e00-7339-11e9-906f-c3fa83643051.png)
 
 
 ## 3: How do conditions change over time? How does uncertainty in change over time? Describe the key changes you see. Limit your response to 500 words and 8 images.
