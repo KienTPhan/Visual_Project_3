@@ -94,6 +94,8 @@ var yAxis = d3.axisLeft(y);
 
 // Get the data
 d3.csv("/data/challenge-data.csv").then(function(data) {
+
+    var stackData = data;
     
     // format the data
     data.forEach(function(d) {
@@ -402,6 +404,9 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     draw_new_line_graph("power");
     draw_new_line_graph("roads_and_bridges");
     draw_new_line_graph("medical");
+
+    //! Add code for stack HERE
+    draw_new_stack("sewer_and_water", formatedData);
     
 
     // show the first location TODO: make this dinamic not hardcoded
@@ -731,5 +736,7 @@ function draw_new_line_graph(damage_area){
     });
 
  }
+
+
 
 // TODO: WORKING 
