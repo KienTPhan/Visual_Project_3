@@ -1,5 +1,9 @@
 #### Mini-Challenge 1: Crowdsourcing for Situational Awareness
 
+### DEMO VIDEO: https://vimeo.com/335486337
+
+### DEMO LINK: https://laughing-bardeen-520b95.netlify.com/
+
 ### Tasks and Questions:
 
 ## 1: Emergency responders will base their initial response on the earthquake shake map. Use visual analytics to determine how their response should change based on damage reports from citizens on the ground. How would you prioritize neighborhoods for response? Which parts of the city are hardest hit? Limit your response to 1000 words and 10 images.
@@ -51,25 +55,29 @@ Figure 9
 
 The condition of the earth quake as reported by the user of the app will be shown via a line graphs. There will be 6 line graphs, one representing each reported damage areas. For example, the first line graph will show all the reported data for damage for buildings. For each of the line it will show the conditions of each neighborhood overtime. 
 
-Figure 10
 <img width="963" alt="Screen Shot 2019-05-10 at 3 06 22 PM" src="https://user-images.githubusercontent.com/35431945/57553839-60712700-7335-11e9-880e-ce4e1452e3f9.png">
 
 
 To allow people to see uncertainty in change over time, our group created a stacked bar graph to show people exactly how many people reported for each location as well as how many people voted for each damage level. For example, if you use the slider and select the date range from 04/07 23:46 To 04/09 00:02 then you can see that there is a significantly more people reporting damages for location 8 or neighborhood 8.
 
-Figure 11
 <img width="1631" alt="Screen Shot 2019-05-10 at 3 10 42 PM" src="https://user-images.githubusercontent.com/35431945/57554238-86e39200-7336-11e9-8ab2-f8907eefbec7.png">
 
 
  We also allow people to hover over the stack to view how many people voted for each damage to allow them to see more details and see if the data is uncertain or not themselves. Looking at location 8 again, you can see that there is much more people reporting that buildings damage is about 5 to 6 out of 10 so that is probably the most accurate reports. 
- 
-Figure 12
+
 <img width="1637" alt="Screen Shot 2019-05-10 at 3 11 20 PM" src="https://user-images.githubusercontent.com/35431945/57554277-a67aba80-7336-11e9-85af-6ac80fae7acb.png">
 
-Figure 13
 <img width="1618" alt="Screen Shot 2019-05-10 at 3 12 49 PM" src="https://user-images.githubusercontent.com/35431945/57554279-a7135100-7336-11e9-82cf-1213f1c1fd61.png">
 
-By doing this, we observed that the uncertainty for the reports are very high when we look at buildings damage over the range of three days.
+By doing this, we observed that the uncertainty for the reports are very high when we look at buildings damage report from date april-6-20 to april-7-20 the uncertainty for neighborhood 1 is incredibly high since there is many people who pick damage 10 as well as there are alot of people who pick damage 0. This is a huge conflict between the data that is given. By allowing our user to view this they will know exactly that the data reported by location 1 has a lot of uncertainty.
+
+<img width="1638" alt="Screen Shot 2019-05-10 at 3 33 45 PM" src="https://user-images.githubusercontent.com/35431945/57555162-273ab600-7339-11e9-871c-6c701a63ae33.png">
+<img width="1651" alt="Screen Shot 2019-05-10 at 3 34 51 PM" src="https://user-images.githubusercontent.com/35431945/57555200-420d2a80-7339-11e9-9408-058bfcf1e34f.png">
+
+We also found an example of an area that might have a very low uncertainty. If look at the data from all of the days from 4-6-20 to 4-11-20. You and look damage for sewer and water stacked graph. You can observe that the data provided by users are very consistent with each other. With the information provided by the stacked bar chart we can conclude that the data for this location is low in uncertainty.
+
+<img width="1581" alt="Screen Shot 2019-05-10 at 3 49 32 PM" src="https://user-images.githubusercontent.com/35431945/57555981-581bea80-733b-11e9-93b9-5e262780da56.png">
+
 
 
 ## Contributers:
