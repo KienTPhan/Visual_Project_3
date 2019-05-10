@@ -44,29 +44,77 @@ var tooltip = stack_svg.append("g")
     .attr("font-weight", "bold");
 
 
-function updateStackBarChart(data){
+function updateStackBarChart(data,damage_area){
 
-  // filter building column
-  data = data.filter(d=>d.buildings!=="-0.0");
-  data = data.filter(d=>d.location!=="");
-  data = data.filter(d=>d.buildings!=="");
-  data = data.filter(d=>d.location!=="7");
-
-  // format data
-  var nested_data_by_building = d3.nest()
-     .key(function(d) { return d.location; })
-     .key(function(d) { return d.buildings; })
-    .rollup(function(d) {return d.length; })
-      // .rollup(function(d) { total += d.length; return {total: total, value: d.length} })
-     // .rollup(function(v) { return d3.sum(v, function(d) {  return d.value; }); })
-     .entries(data);
-
+   // filter building column
+   data = data.filter(d=>d.buildings!=="-0.0");
+   data = data.filter(d=>d.location!=="");
+   data = data.filter(d=>d.buildings!=="");
+   data = data.filter(d=>d.location!=="7");
+ 
+   
+ 
+ var nested_data_by_category;
+ 
+ 
+  //var value = "medical";
+  //var value = parseInt(document.getElementById("selectvalue").value);
+  //console.log(value);
+ 
+ switch(damage_area)
+ {
+   case "buildings": nested_data_by_category = d3.nest()
+             .key(function(d) { return d.location; })
+             .key(function(d) { return d.buildings; })
+            .rollup(function(d) {return d.length; })
+             .entries(data);
+             break;
+   case "medical": 
+     nested_data_by_category = d3.nest()
+       .key(function(d) { return d.location; })
+       .key(function(d) { return d.medical; })
+      .rollup(function(d) {return d.length; })
+       .entries(data);
+       break;
+ 
+   case "sewer_and_water":
+       nested_data_by_category = d3.nest()
+       .key(function(d) { return d.location; })
+       .key(function(d) { return d.sewer_and_water; })
+      .rollup(function(d) {return d.length; })
+       .entries(data);
+       break;
+ 
+ case "roads_and_bridges":
+       nested_data_by_category = d3.nest()
+       .key(function(d) { return d.location; })
+       .key(function(d) { return d.roads_and_bridges; })
+      .rollup(function(d) {return d.length; })
+       .entries(data);
+       break;
+ case "power":
+       nested_data_by_category = d3.nest()
+       .key(function(d) { return d.location; })
+       .key(function(d) { return d.power; })
+       .rollup(function(d) {return d.length; })
+       .entries(data);
+       break;
+ case "shake_intensity":
+       nested_data_by_category = d3.nest()
+       .key(function(d) { return d.location; })
+       .key(function(d) { return d.shake_intensity; })
+       .rollup(function(d) {return d.length; })
+       .entries(data);
+       break;
+ 
+ default: break;
+       }
   
   var numResponseForEachLocationArr = [];
-  var keyForEachLocationArr =[]
-
+  var keyForEachLocationArr =[];
+console.log(nested_data_by_category);
   // fill in the array above
-  nested_data_by_building.forEach(function(datum) {
+  nested_data_by_category.forEach(function(datum) {
   // go through every location and add all the #response
   keyForEachLocationArr.push(datum.key);
   eachLocationData = datum.values;
@@ -82,7 +130,7 @@ function updateStackBarChart(data){
   //console.log(keyForEachLocationArr);
   var keys = d3.range(keyForEachLocationArr);
 
-  sData = nested_data_by_building.map(d => {
+  sData = nested_data_by_category.map(d => {
     //debugger;
   let result = {};
   result.location = d.key;
@@ -109,28 +157,32 @@ function updateStackBarChart(data){
 
   // g.append("g")
   //   .attr("id","stack_container") // TEST
-    let damageLevelsGroups = g.selectAll("g")
-    .data(stackedData)
-    .join("g")
-      .attr("fill", function(d) { return z(d.key); })
-    .selectAll("rect")
-    .data(function(d) { return d; })
-    .join("rect")
-      //.attr("border-style","solid")
-      .attr("x", function(d){ return stack_x(d.data.location);})
-      .attr("y", function(d) { return stack_y(d[1]); })
-      .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
-      .attr("width", stack_x.bandwidth())
-    .on("mouseover", function() { tooltip.style("display", null); })
-    .on("mouseout", function() { tooltip.style("display", "none"); })
-    .on("mousemove", function(d, i) {
-      // debugger;
-      // console.log(d);
-      var xPosition = d3.mouse(this)[0] - 5;
-      var yPosition = d3.mouse(this)[1] - 5;
-      tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-      tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
-    });
+  let damageLevelsGroups = g.selectAll("g")
+  .data(stackedData);
+  let damageLevelEnter = damageLevelsGroups.enter().append("g")
+    .attr("fill", function(d) { return z(d.key); });
+  damageLevelsGroups.exit().remove();
+  damageLevelsGroups = damageLevelEnter.merge(damageLevelsGroups);
+
+  let locationRects = damageLevelsGroups.selectAll("rect")
+  .data(function(d) { return d; });
+  let locationEnter = locationRects.enter().append("rect");
+  locationRects = locationEnter.merge(locationRects);
+    //.attr("border-style","solid")
+    locationRects.attr("x", function(d){ return stack_x(d.data.location);})
+    .attr("y", function(d) { return stack_y(d[1]); })
+    .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
+    .attr("width", stack_x.bandwidth())
+  .on("mouseover", function() { tooltip.style("display", null); })
+  .on("mouseout", function() { tooltip.style("display", "none"); })
+  .on("mousemove", function(d, i) {
+    // debugger;
+    // console.log(d);
+    var xPosition = d3.mouse(this)[0] - 5;
+    var yPosition = d3.mouse(this)[1] - 5;
+    tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+    tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
+  });
 
 //fix later for entering new bar or exiting new bar
  g.append("g")
@@ -194,7 +246,7 @@ var stack_svg = d3.select("#stack-div-"+damage_area).append("svg"),
   data = data.filter(d=>d.buildings!=="");
   data = data.filter(d=>d.location!=="7");
 
-  var i = 1;
+  
 
 var nested_data_by_category;
 
@@ -383,6 +435,7 @@ function updateStackBarChartDamageArea(data,damage_area){
 
   var nested_data_by_category;
 
+
  //var value = "medical";
  //var value = parseInt(document.getElementById("selectvalue").value);
  //console.log(value);
@@ -426,19 +479,14 @@ case "power":
       .entries(data);
       break;
 
-case "shake_intensity":
-      nested_data_by_category = d3.nest()
-      .key(function(d) { return d.location; })
-      .key(function(d) { return d.shake_intensity; })
-      .rollup(function(d) {return d.length; })
-      .entries(data);
-      break;
-
 default: break;
       }
 
+  
   var numResponseForEachLocationArr = [];
   var keyForEachLocationArr =[]
+
+  //console.log(nested_data_by_category);
 
   // fill in the array above
   nested_data_by_category.forEach(function(datum) {
@@ -482,30 +530,32 @@ default: break;
 
   stackedData = stackFunction(sData);
 
-  // g.append("g")
-  //   .attr("id","stack_container") // TEST
-    let damageLevelsGroups = g.selectAll("g")
-    .data(stackedData)
-    .join("g")
-      .attr("fill", function(d) { return z(d.key); })
-    .selectAll("rect")
-    .data(function(d) { return d; })
-    .join("rect")
-      //.attr("border-style","solid")
-      .attr("x", function(d){ return stack_x(d.data.location);})
-      .attr("y", function(d) { return stack_y(d[1]); })
-      .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
-      .attr("width", stack_x.bandwidth())
-    .on("mouseover", function() { tooltip.style("display", null); })
-    .on("mouseout", function() { tooltip.style("display", "none"); })
-    .on("mousemove", function(d, i) {
-      // debugger;
-      // console.log(d);
-      var xPosition = d3.mouse(this)[0] - 5;
-      var yPosition = d3.mouse(this)[1] - 5;
-      tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-      tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
-    });
+  let damageLevelsGroups = g.selectAll("g")
+  .data(stackedData);
+  let damageLevelEnter = damageLevelsGroups.enter().append("g")
+    .attr("fill", function(d) { return z(d.key); });
+  damageLevelsGroups.exit().remove();
+  damageLevelsGroups = damageLevelEnter.merge(damageLevelsGroups);
+
+  let locationRects = damageLevelsGroups.selectAll("rect")
+  .data(function(d) { return d; });
+  let locationEnter = locationRects.enter().append("rect");
+  locationRects = locationEnter.merge(locationRects);
+    //.attr("border-style","solid")
+    locationRects.attr("x", function(d){ return stack_x(d.data.location);})
+    .attr("y", function(d) { return stack_y(d[1]); })
+    .attr("height", function(d) { return stack_y(d[0]) - stack_y(d[1]); })
+    .attr("width", stack_x.bandwidth())
+  .on("mouseover", function() { tooltip.style("display", null); })
+  .on("mouseout", function() { tooltip.style("display", "none"); })
+  .on("mousemove", function(d, i) {
+    // debugger;
+    // console.log(d);
+    var xPosition = d3.mouse(this)[0] - 5;
+    var yPosition = d3.mouse(this)[1] - 5;
+    tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+    tooltip.select("text").text("Response #: " + (d[1]-d[0]) + "; Damage:" +(this.parentElement.__data__.key));
+  });
 
 //fix later for entering new bar or exiting new bar
  g.append("g")
