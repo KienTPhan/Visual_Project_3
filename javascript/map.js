@@ -245,9 +245,9 @@ function updateMap_damage_area(newData,damage_area) {
           .key(d => d.location)
           .rollup(function(d) {
                   return{
-                    'mean_Power': d3.mean(d, e=>+e.power),
-                    'max_Power': d3.max(d, e=>+e.power),
-                    'min_Power': d3.min(d,e=>+e.power),
+                    'mean_power': d3.mean(d, e=>+e.power),
+                    'max_power': d3.max(d, e=>+e.power),
+                    'min_power': d3.min(d,e=>+e.power),
                     'mean_sewer_and_water': d3.mean(d, e=>+e.sewer_and_water),
                     'max_sewer_and_water': d3.max(d, e=>+e.sewer_and_water),
                     'min_sewer_and_water': d3.min(d,e=>+e.sewer_and_water),

@@ -399,6 +399,7 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
 
    //! ADD CODE HERE
    draw_new_line_graph("shake_intensity");
+   draw_new_line_graph("shake_intensity");
    draw_new_line_graph("sewer_and_water");
    draw_new_line_graph("power");
    draw_new_line_graph("roads_and_bridges");
@@ -407,6 +408,14 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
     // ! Add code here - to create other maps
     draw_new_map("shake_intensity");
     updateMap_damage_area(data,"shake_intensity");
+    draw_new_map("sewer_and_water");
+    updateMap_damage_area(data,"sewer_and_water");
+    draw_new_map("power");
+    updateMap_damage_area(data,"power");
+    draw_new_map("roads_and_bridges");
+    updateMap_damage_area(data,"roads_and_bridges");
+    draw_new_map("medical");
+    updateMap_damage_area(data,"medical");
 
    //! Add code for stack HERE
    draw_new_stack("shake_intensity", formatedData);
@@ -502,7 +511,14 @@ function update(start_date,end_date) {
 
    updateMap(newData);
 
-   // Add code here- for update stacks
+   //! Add code here- for update map
+   updateMap_damage_area(newData,"shake_intensity");
+   updateMap_damage_area(newData,"sewer_and_water");
+   updateMap_damage_area(newData,"power");
+   updateMap_damage_area(newData,"roads_and_bridges");
+   updateMap_damage_area(newData,"medical");
+
+   //! Add code here- for update stacks
    updateStackBarChart(newData);
    //updateStackBarChart2(newData);
    updateStackBarChartDamageArea(newData,"shake_intensity");
