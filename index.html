@@ -7,54 +7,63 @@
 </head>
 
 <body>
-       <nav class="navbar navbar-default" style="background:#E8E8E8">
-               <div class="" style="padding-left: 100px;">
-                   <a class="navbar-brand" href="#"><img id="logo" src="disaster-relief-round-logo.png"></a>  
-                 <label style="font-size: 30px;">Disaster Relief Program</label>
-               </div>
-           </nav>
 
- <div class="main-container">
-    
-       <div class="row align-items-center">
-               <div class="col-sm-2"><p id="value-range"></p></div>
-               <div class="col-sm"><div id="slider-range"></div></div>
-             </div>
-   <button id="update-button" type="button" class="btn btn-primary align-items-center">Update</button>
-   <div id="location-selector-div" class="location-checkbox"></div>
-   <hr>
-   <hr>
+  <!-- Nav bar -->
+  <nav class="navbar navbar-default" style="background:#E8E8E8">
+          <div class="" style="padding-left: 100px;">
+              <a class="navbar-brand" href="#"><img id="logo" src="disaster-relief-round-logo.png"></a>  
+            <label style="font-size: 30px;">Disaster Relief Program</label>
+          </div>
+  </nav>
+  <!-- Nav bar -->
+
+  <!-- control center -->
+  <div class="main-container">
+      
+        <div class="row align-items-center">
+                <div class="col-sm-2"><p id="value-range"></p></div>
+                <div><div id="slider-range"></div></div>
+                <button id="update-button" type="button" class="btn btn-primary align-items-center">Update</button>        
+          </div>
+  <div id="location-selector-div" class="location-checkbox"></div>
+  <hr>
+  <!-- control center -->
+  
  
-   <div class="row">
-       <div class="col">
-           <div id="line-graph-div"></div>       
-       </div>
+  <div class="row">
+      <div class="col">
+        <h3>Damage for Buildings</h3>
+        <!-- buildings -->
+        <div id="line-graph-div"></div>
+        <!-- sewer -->
+        <div id="line-graph-div-sewer_and_water"></div>
+        <!-- power -->
+        <div id="line-graph-div-power"></div>
 
-       <div>
-            <div class="tab row">
-                   <button class="tablinks" onclick="changeTab(event, 'Map')" id="defaultOpen">Map</button>
-                   <button class="tablinks" onclick="changeTab(event, 'stack')">Stack</button>
-            </div>
+      </div>
 
-            <div id="Map" class="tabcontent row">
-                   <h3>Map</h3>
-                   <div id="map-div"></div>
-                  
-       </div>
-       <div id="stack" class="tabcontent row">
-               <h3>Incoming Responses</h3>
-               <div id="main" class="col">
-                       <svg id="stack-svg-id" width="700" height="380" style="background:#ffffff"></svg>
-                   </div>
-       </div>
-       </div>
-     
-      
-       <div id="main" class="col">
-           <svg id="stack-svg-id" width="700" height="380" style="background:#ffffff"></svg>
-       </div>
-      
-   </div>
+      <div>
+        <div class="tab row">
+            <button class="tablinks" onclick="changeTab(event, 'Map')" id="defaultOpen">Map</button>
+          <button class="tablinks" onclick="changeTab(event, 'stack')">Stack</button>
+        </div>
+
+        <div id="Map" class="tabcontent row">
+          <div id="map-div"></div>
+          <h1>Map2</h1>
+        </div>
+      <div id="stack" class="tabcontent row">
+        <div id="main" class="col">
+          <svg id="stack-svg-id" width="700" height="330" style="background:#ffffff"></svg>
+        </div>
+        <h1>stack2</h1>
+
+      </div>
+      </div>
+  </div>
+  <!-- buildings -->
+
+
 </div>
 
    <!-- <div class="col-3">

@@ -10,7 +10,7 @@ var map_color = d3.scaleQuantile()
                 ]);
 
 var mapMargin = { top: 50, left: 50, right: 50, bottom: 50},
-    mapHeight = 400 - mapMargin.top - mapMargin.bottom,
+    mapHeight = 310 - mapMargin.top - mapMargin.bottom,
     mapWidth     = 800 - mapMargin.left - mapMargin.right;
 
 var map_svg = d3.select("#map-div")
@@ -21,12 +21,50 @@ var map_svg = d3.select("#map-div")
                 .append('g')
                 .attr('transform','translate(' + mapMargin.left + ',' + mapMargin.top + ')');
 
+// !test
+
+var legend_data = [ {number:0, color: "#ffffe5"},{number:1,color:"#fff7bc"}, {number:2,color:"#fee391"},
+{number:3,color: "#fec44f"},{number:4,color: "#feb24c"},{number:5, color: "#fd8d3c"},{number:6, color:"#fc4e2a"},
+{number:7,color:"#c92828"},{number:8, color:"#931414"},{number:9, color:"#630707"},{number:10, color:"#330202"}].reverse();
+
+var legend = map_svg.append("g")
+.attr('id','legend_group')
+.attr("font-family", "sans-serif")
+.attr("font-size", 15)
+.attr("text-anchor", "end")
+.selectAll("g")
+.data(legend_data)
+.enter().append("g")
+.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+legend.append("rect")
+.attr("x", mapWidth - 19)
+.attr("border-style","solid")
+.attr("width", 19)
+.attr("height", 19)
+.attr("fill", function(d){
+  return d.color;
+});
+
+legend.append("text")
+.attr("x", mapWidth - 24)
+.attr("y", 9.5)
+.attr("dy", "0.32em")
+.text(function(d) { return d.number; });
+
+// Temp quick fix that might stay: To chang legend y axis
+d3.select('#legend_group')
+.attr("transform", function(d, i) { return "translate(50,0)"; });
+
+// !test
+
+
 // Create a projection using mercator (geoMercator)
 // and center it (translate)
 // and zoom in a certain amount (scale)
  var mapProjection = d3.geoMercator()
-  .scale(100000)
-  .translate([mapWidth/0.003341, mapHeight/0.85])
+  .scale(75000)
+  .translate([mapWidth/0.0044525, mapHeight/0.85])
 
 // create a path (geoPath) using the projection
 var map_path = d3.geoPath().projection(mapProjection);
@@ -105,7 +143,6 @@ function updateMap(newData) {
       .attr('class','.neighbors')
       .attr( 'd', map_path )
       .attr( 'fill', function(d){
-        // debugger;
         // if data given is blank
         if (d.properties.damage_value === null){
           return 'grey';

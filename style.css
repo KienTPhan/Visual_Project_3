@@ -1,4 +1,9 @@
+/* slider */
+
 /* line-graph stuff */
+.line-graph-svg{
+}
+
 .line {
     fill: none;
     stroke: steelblue;
@@ -97,8 +102,15 @@ padding: 5px 0px;
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
-  height: 60.984375px;
-  width: 71.96875px
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 82px;
+  height: 25px;
+ }
+
+ h3{
+  text-align: center;
+  font-size: 1.75rem;
  }
  
  /* Change background color of buttons on hover */
@@ -114,6 +126,7 @@ padding: 5px 0px;
  /* Style the tab content */
  .tabcontent {
   display: none;
+  width: 826px;
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;

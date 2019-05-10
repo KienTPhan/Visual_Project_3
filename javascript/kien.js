@@ -28,13 +28,23 @@ var valueline = d3.line()
     .y(function(d) { return y(d.buildings); });
 
 // define the line TEST
-var valuelineTest = d3.line() // TODO: make it so its dynamic not just mean of building
+var valuelineFor_sewer_and_water = d3.line() // TODO: make it so its dynamic not just mean of building
     .defined(function (d) { return d.buildings !== null; })
     .x(function(d) { return x(d.key); })
-    .y(function(d) { return y(d.value.mean_buildings); });
+    .y(function(d) { return y(d.value.mean_sewer_and_water);});
+
+// define the line TEST
+var valuelineFor_power = d3.line() // TODO: make it so its dynamic not just mean of building
+    .defined(function (d) { return d.buildings !== null; })
+    .x(function(d) { return x(d.key); })
+    .y(function(d) { return y(d.value.mean_Power);});
+
+    
+
 
 // set the colour scale
-var color = d3.scaleOrdinal(['#c45a74', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#42d4f4', '#f032e6', '#fabebe', '#469990', '#e6beff', '#9A6324', '#d8d186', '#800000', '#aaffc3','#000075','#a9a9a9','#ef7056','#000000']);
+var color = d3.scaleOrdinal(['#c45a74', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#42d4f4', '#f032e6', '#fabebe', '#469990', 
+'#e6beff', '#9A6324', '#d8d186', '#800000', '#aaffc3','#000075','#a9a9a9','#ef7056','#000000','#7f00ff']);
 
 // add a div to contain all locations to be selected
 var locationSelectorDiv = d3.select("#location-selector-div").append("div")
@@ -46,12 +56,12 @@ var locationSelectorDiv = d3.select("#location-selector-div").append("div")
 
 // full formated data
 var formatedData;
-var allData;
 
 // append the svg object to the line-graph-div of the page
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
 var svg = d3.select("#line-graph-div").append("svg")
+    .attr('class','line-graph-svg')
     .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
     .attr("height", line_graph_height + line_graph_margin.top + line_graph_margin.bottom)
   .append("g")
@@ -176,6 +186,16 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
         .attr("class", "y axis")
         .call(yAxis);
 
+    // adding y axis label
+    svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x", -height+175)
+    .attr("y", -45)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("damage scale");
+
     // Add clip path to hide data outside chart domain
     svg.append("defs").append("clipPath")
       .attr("id", "clip")
@@ -265,11 +285,25 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                     var active   = d.active ? false : true,
                     newOpacity = active ? 1 : 0; 
                     newEvent   = active ? 'all':'none';
-                    // Hide or show the lines based on the ID
+                    // Hide or show the lines based on the ID FOR BUILDING
                     d3.select("#tag"+d.key.replace(/\s+/g, ''))
                         .transition().duration(100) 
                         .style("opacity", newOpacity)
                         .style('pointer-events',newEvent);
+
+                    // Hide or show the lines based on the ID FOR SEWER
+                    d3.select("#tag"+d.key.replace(/\s+/g, '')+"sewer_and_water")
+                        .transition().duration(100) 
+                        .style("opacity", newOpacity)
+                        .style('pointer-events',newEvent);
+
+                     // Hide or show the lines based on the ID FOR POWER
+                     d3.select("#tag"+d.key.replace(/\s+/g, '')+"power")
+                     .transition().duration(100) 
+                     .style("opacity", newOpacity)
+                     .style('pointer-events',newEvent);
+//! ADD CODE HERE
+                    
                     // Update whether or not the elements are active
                     d.active = active;
                     });
@@ -280,11 +314,6 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
                         
  
       }); 
-
-    // show the first location TODO: make this dinamic not hardcoded
-    document.getElementById('location-selector1').click();
-
-    
 
     // store range for slider
     var sliderDateData = [];
@@ -330,6 +359,13 @@ d3.csv("/data/challenge-data.csv").then(function(data) {
       d3.select("#update-button").on("click", function() {
         update(start_date,end_date);
       });
+
+    //! ADD CODE HERE
+    draw_new_line_graph("sewer_and_water");
+    draw_new_line_graph("power");
+
+    // show the first location TODO: make this dinamic not hardcoded
+    document.getElementById('location-selector1').click();
 
 });
 
@@ -427,7 +463,7 @@ function reDrawLineGraph(newData,newAggregateData){
         // Add the lines of each location
         svg.select('#tag' + d.key.replace(/\s+/g, ''))
             .duration(750)
-            .attr("d", valuelineTest(d.values));
+            .attr("d", valuelineFor_Aggregate_Data(d.values));
         
     });
 
@@ -466,6 +502,194 @@ function changeTab(evt, cityName) {
   }
   document.getElementById("defaultOpen").click();
  
- 
- 
- 
+
+// TODO: WORKING 
+
+function draw_new_line_graph(damage_area){
+    
+    // append the svg object to the line-graph-div of the page
+    // appends a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    var svg = d3.select("#line-graph-div-"+damage_area).append("svg")
+        .attr('class','line-graph-svg')
+        .attr("width", line_graph_width + line_graph_margin.left + line_graph_margin.right)
+        .attr("height", line_graph_height + line_graph_margin.top + line_graph_margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + line_graph_margin.left + "," + line_graph_margin.top + ")");
+
+    d3.csv("/data/challenge-data.csv").then(function(data) {
+
+        // format the data
+        data.forEach(function(d) {
+            
+            d.string_time = d.time;
+            d.time = parseTime(d.time); // use to aggregate by hour
+    
+            if(d.buildings != ''){
+    
+                d.buildings = +d.buildings;
+    
+            } else {
+    
+                d.buildings = null;
+    
+            }
+    
+        });
+    
+        // sort data by date 
+        data = data.sort(function(a, b) {
+            // Dates will be cast to numbers automagically:
+            return a.time - b.time;
+            });
+    
+        formatedData = data;
+    
+        // aggregate the data by hours
+        var aggregated_data = d3.nest()
+                .key(d => d.location)
+                .key(d => d.string_time.slice(0,13))
+                    .rollup(function(d) {
+                        return{
+                          'mean_Power': d3.mean(d, e=>+e.power),
+                          'max_Power': d3.max(d, e=>+e.power),
+                          'min_Power': d3.min(d,e=>+e.power),
+                          'mean_sewer_and_water': d3.mean(d, e=>+e.sewer_and_water),
+                          'max_sewer_and_water': d3.max(d, e=>+e.sewer_and_water),
+                          'min_sewer_and_water': d3.min(d,e=>+e.sewer_and_water),
+                          'mean_roads_and_bridges': d3.mean(d, e=>+e.roads_and_bridges),
+                          'max_roads_and_bridges': d3.max(d, e=>+e.roads_and_bridges),
+                          'min_roads_and_bridges': d3.min(d,e=>+e.roads_and_bridges),
+                          'mean_medical': d3.mean(d, e=>+e.medical),
+                          'max_medical': d3.max(d, e=>+e.medical),
+                          'min_medical': d3.min(d,e=>+e.medical),
+                          'mean_buildings': d3.mean(d, e=>+e.buildings),
+                          'max_buildings': d3.max(d, e=>+e.buildings),
+                          'min_buildings': d3.min(d,e=>+e.buildings),
+                            'min_shake_intensity': d3.min(d,e=>+e.shake_intensity),
+                            'max_shake_intensity': d3.max(d,e=>+e.shake_intensity),
+                            'mean_shake_intensity': d3.mean(d,e=>+e.shake_intensity)
+                        };
+                      })
+                     .entries(data);
+    
+        // format the aggregated_data
+        aggregated_data.forEach(function(d) {
+            
+            d.values.forEach(function(d){
+                
+                d.key = parseTimeForAggregateData(d.key);
+    
+            })
+    
+        });
+    
+        // sort the aggregated_data by date 
+        aggregated_data.forEach(function(d) {
+    
+            d.values = d.values.sort(function(a, b) {
+                // Dates will be cast to numbers automagically:
+                return a.key - b.key;
+                });
+        });
+    
+        // sort the aggregated_data by location name
+        aggregated_data = aggregated_data.sort(function(a,b) {
+            return +a.key - +b.key;
+        })
+    
+        // draw map
+        updateMap(data);
+    
+        // draw stack bar chart
+        updateStackBarChart(data)
+    
+        // Scale the range of the data
+        x.domain(d3.extent(data, function(d) { return d.time; }));
+        y.domain([0, d3.max(data, function(d) { return d[selected_damage_area]; })]);
+    
+        // Add the X Axis
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + line_graph_height + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-15)");
+    
+        // Add the Y Axis
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+    
+        // adding y axis label
+        svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -height+175)
+        .attr("y", -45)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("damage scale");
+    
+        // Add clip path to hide data outside chart domain
+        svg.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", line_graph_width)
+            .attr("height", line_graph_height);
+    
+        legendSpace = line_graph_width/aggregated_data.length; // spacing for the legend
+    
+        // Loop through each symbol / key
+            aggregated_data.forEach(function(d,i) { 
+    
+            var current_location = d.key;
+    
+            // Add the lines of each location
+            svg.append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colours dynamically
+                return d.color = color(current_location); })
+            .style("opacity", 0)
+            .style('pointer-events','none')
+            .attr("id", 'tag'+current_location.replace(/\s+/g, '')+damage_area) // assign an ID
+            .attr("d", eval("valuelineFor_"+damage_area +"(d.values)"))
+                .on('mouseover', function(d,i) {
+                    var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
+    
+                    //show current map path of the hovered line
+                    d3.select('#map_path_id_'+current_location_id)
+                        .classed('mapHovered',true);
+    
+                    d3.select(this).classed('line_hovered',true);
+                    div.transition()		
+                            .duration(200)		
+                            .style("opacity", .9);		
+                        div	.html("Neiborhood " + current_location_id)	 // very nicely getting the id of the line
+                            .style("left", (d3.event.pageX) + "px")		
+                            .style("top", (d3.event.pageY - 28) + "px");					
+                })
+                .on('mouseout', function(d){
+                    var current_location_id = d3.select(this)._groups[0][0].id.slice(3);
+    
+                    d3.select(this).classed('line_hovered',false);
+                    div.transition()		
+                            .duration(500)		
+                            .style("opacity", 0);	
+    
+                    //show current map path of the hovered line
+                    d3.select('#map_path_id_'+current_location_id)
+                        .classed('mapHovered',false);
+                });         
+        
+            }); 
+    
+    });
+
+ }
+
+// TODO: WORKING 
