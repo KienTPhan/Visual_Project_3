@@ -30,4 +30,6 @@ Our visualization answers this question by providing a stack bar graph to show t
 
 
 ## 3: How do conditions change over time? How does uncertainty in change over time? Describe the key changes you see. Limit your response to 500 words and 8 images.
-.
+
+Contributers:
+All team members put their fair share of work into the project. Miranda worked on the stack bar graph and the front end work in the project while Kien worked on the map and the line graph. Both team members assisted each other when a challenge posed, and offered to help each other throughout the project. 
