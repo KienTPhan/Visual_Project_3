@@ -7,14 +7,15 @@ In this visualization, the user will see 6 line graphs, each representing a diff
 
 As you look over the maps, the user will notice that Location 3 is always a darker color which means that it is constantly in a damage state. This means that the responder will likely go to this location for aiding the citizens there. 
 ## 2: Use visual analytics to show uncertainty in the data. Compare the reliability of neighborhood reports. Which neighborhoods are providing reliable reports? Provide a rationale for your response. Limit your response to 1000 words and 10 images.
-Our visualization answers this question by providing a stack bar graph to show the damage score people report for locations. On the x asix, the user will see that all the locations are displayed in numerical order, making it easy to find a location. On the y axis,  The stack rectangles represent the damage score 0-10 (10 being the most damaged) and the height of the those rectangles show the amount of people who chose that specific damage score. 
+Our visualization answers this question by providing a stack bar graph to show the damage score people report for locations. On the x asix, the user will see that all the locations are displayed in numerical order, making it easy to find a location. On the y axis, it displays the number  The stack rectangles represent the damage score 0-10 (10 being the most damaged) and the height of the those rectangles show the amount of people who chose that specific damage score. 
 
 
 
-### Propose Solution:
 
 
 
-## 2: We will also use a bar chart to show the uncertainty of the data between neiborhoods as well as certain category.
 
-## 3: Our line graph will show how the condition change over time. We will allow users to switch between range of date to show the uncertainty of the data between neiborhoods.
+
+
+## 3: How do conditions change over time? How does uncertainty in change over time? Describe the key changes you see. Limit your response to 500 words and 8 images.
+.
